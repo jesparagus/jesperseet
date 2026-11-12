@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jesper — Photography & Cinematography</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--ink:#111;--mute:#8a8a8a;--line:#e4e4e4;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--ink);font:300 12px/1.6 "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow:hidden}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:1px solid var(--ink);outline-offset:3px}
+header{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;display:flex;justify-content:space-between;padding:22px 28px;z-index:10}
+nav a{margin-left:22px;color:var(--mute)}
+nav a:hover,nav a[aria-current="page"]{color:var(--ink)}
+nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
+.page{display:none;position:absolute;inset:0}
+.page.on{display:block}
+
+/* curved gallery */
+#stagePh{position:absolute;inset:0;perspective:900px;perspective-origin:50% 50%;overflow:hidden;touch-action:pan-y}
+#ring{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d}
+.slot{position:absolute;left:0;top:0;transform-style:preserve-3d;backface-visibility:hidden}
+.tile{position:absolute;display:block;padding:0;border:0;background:none;cursor:pointer;
+ transform:translateZ(0);transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.tile:hover,.tile:focus-visible{transform:translateZ(70px) scale(1.06)}
+.tile .ph,.tile img{display:block;width:100%;height:100%;object-fit:cover}
+.tile .cap{position:absolute;left:0;top:calc(100% + 8px);white-space:nowrap;color:var(--ink);opacity:0;transition:opacity .3s}
+.tile:hover .cap,.tile:focus-visible .cap{opacity:1}
+.note{position:absolute;left:28px;bottom:calc(22px + env(safe-area-inset-bottom,0px));color:var(--mute)}
+
+/* cinematography */
+.cine.on{display:flex}
+.cine{flex-direction:column;justify-content:center;align-items:center;gap:36px;padding:90px 28px 40px;overflow:auto}
+.reel{position:relative;display:block;width:min(900px,100%);aspect-ratio:16/9;background:#f4f4f4;border:1px solid var(--line)}
+.reel .tri{position:absolute;left:50%;top:50%;width:0;height:0;border-left:16px solid var(--ink);border-top:10px solid transparent;border-bottom:10px solid transparent;transform:translate(-35%,-50%);transition:transform .3s}
+.reel:hover .tri{transform:translate(-35%,-50%) scale(1.25)}
+.reel .lab{position:absolute;left:14px;bottom:10px}
+.films{width:min(900px,100%);display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:16px}
+.films a{border-bottom:1px solid var(--ink)}
+
+/* lightbox */
+#lb{position:fixed;inset:0;background:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:30;padding:60px 28px}
+#lb.open{display:flex}
+#lb .box{max-width:100%;max-height:78vh;width:min(70vw,900px);aspect-ratio:var(--r)}
+#lb .box>*{width:100%;height:100%;object-fit:contain;display:block}
+#lb button{position:absolute;background:none;border:0;font:inherit;color:var(--mute);cursor:pointer;padding:10px}
+#lb button:hover{color:var(--ink)}
+#lb .x{top:max(18px,env(safe-area-inset-top));right:22px}#lb .p{left:18px;top:50%}#lb .n{right:18px;top:50%}
+@media (max-width:720px){header{padding:16px 18px}.note{left:18px}#lb .box{width:100%}}
+</style>
+</head>
+<body>
+<header>
+  <a href="#photography">Jesper</a>
+  <nav><a href="#photography" data-p="photography">photography</a><a href="#cinematography" data-p="cinematography">cinematography</a></nav>
+</header>
+
+<main>
+  <section class="page" id="photography" aria-label="Photography">
+    <div id="stagePh"><div id="ring"></div></div>
+    <div class="note">move the cursor to spin · click a photo to open</div>
+  </section>
+
+  <section class="page cine" id="cinematography" aria-label="Cinematography">
+    <a class="reel" id="reelLink" href="#" target="_blank" rel="noopener" aria-label="Watch the reel">
+      <span class="tri"></span><span class="lab">reel</span>
+    </a>
+    <div class="films"><span>all films</span><a id="filmsLink" href="#" target="_blank" rel="noopener">view all my films</a></div>
+  </section>
+</main>
+
+<div id="lb" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <button class="x" aria-label="Close">close</button>
+  <button class="p" aria-label="Previous photo">prev</button>
+  <button class="n" aria-label="Next photo">next</button>
+  <div class="box" id="box"></div><div id="cap"></div>
+</div>
+
+<script>
+/* ===== EDIT THESE ===== */
+var REEL_URL  = "#";   // your reel link (Vimeo / YouTube)
+var FILMS_URL = "#";   // page listing all your films
+/* t = title, r = width/height ratio, src = image ("" shows a placeholder) */
+var PHOTOS = [
+ {t:"Golden hour, Huntington",r:1.5,src:""},{t:"Barber shop portrait",r:.8,src:""},
+ {t:"Wedding first look",r:1.35,src:""},{t:"Bolsa Chica dawn",r:1.6,src:""},
+ {t:"Summerween",r:.75,src:""},{t:"Location scout",r:.8,src:""},
+ {t:"Corporate event",r:1.5,src:""},{t:"Night street",r:.75,src:""},
+ {t:"On set",r:1.4,src:""},{t:"Backlit",r:.8,src:""},
+ {t:"Interior",r:1.55,src:""},{t:"Friends",r:.8,src:""},
+ {t:"Coastline",r:1.6,src:""},{t:"Portrait study",r:.8,src:""}
+];
+/* ====================== */
+document.getElementById("reelLink").href=REEL_URL;
+document.getElementById("filmsLink").href=FILMS_URL;
+var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function media(p,lg,seed){
+  if(p.src){var i=document.createElement("img");i.src=p.src;i.alt=p.t;return i;}
+  var d=document.createElement("div");d.className="ph";d.setAttribute("role","img");d.setAttribute("aria-label",p.t+" (placeholder)");
+  var h=((seed==null?p.t.length:seed)*37)%360;d.style.background="linear-gradient(170deg,hsl("+h+" 22% 80%) 0%,hsl("+((h+30)%360)+" 26% 62%) 55%,hsl("+((h+60)%360)+" 22% 36%) 100%)";return d;
+}
+
+/* routing: separate pages via #hash */
+function route(){
+  var h=location.hash.slice(1)==="cinematography"?"cinematography":"photography";
+  document.querySelectorAll(".page").forEach(function(s){s.classList.toggle("on",s.id===h)});
+  document.querySelectorAll("nav a").forEach(function(a){a.toggleAttribute("aria-current",a.dataset.p===h);if(a.dataset.p===h)a.setAttribute("aria-current","page")});
+  if(h!=="photography")closeLb();
+}
+addEventListener("hashchange",route);
+
+/* spherical gallery: tiles sit on the inside of a sphere */
+var ring=document.getElementById("ring"),P=PHOTOS.length,N=36,slots=[],R=640,D=96,W=300;
+function size(){var m=innerWidth<720;R=m?380:640;D=R*.15;W=m?170:Math.min(320,innerWidth*.23);
+  slots.forEach(function(o){var w=o.p.r<1?W*.72:W,h=w/o.p.r;o.b.style.cssText="width:"+w+"px;height:"+h+"px;left:"+(-w/2)+"px;top:"+(-h/2)+"px"})}
+var GA=Math.PI*(3-Math.sqrt(5));
+for(var i=0;i<N;i++)(function(i){
+  var p=PHOTOS[i%P],lat=Math.asin((1-2*(i+.5)/N)*.88),lon=i*GA;
+  var s=document.createElement("div");s.className="slot";
+  var b=document.createElement("button");b.className="tile";b.type="button";b.setAttribute("aria-label","Open "+p.t);
+  b.appendChild(media(p,false,i));var c=document.createElement("span");c.className="cap";c.textContent=p.t;b.appendChild(c);
+  b.addEventListener("click",function(){openLb(i%P)});
+  s.appendChild(b);ring.appendChild(s);
+  slots.push({s:s,b:b,p:p,i:i,lat:lat,lon:lon,x:-Math.cos(lat)*Math.sin(lon),y:Math.sin(lat),z:-Math.cos(lat)*Math.cos(lon)});
+})(i);
+size();addEventListener("resize",size);
+
+var ry=0,rx=0,vx=0,vy=0,mx=.5,my=.5,active=false,t0=performance.now();
+var stage=document.getElementById("stagePh");
+stage.addEventListener("pointermove",function(e){var r=stage.getBoundingClientRect();mx=(e.clientX-r.left)/r.width;my=(e.clientY-r.top)/r.height;active=true});
+stage.addEventListener("pointerleave",function(){active=false});
+function frame(now){
+  var t=(now-t0)/1000;
+  if(document.getElementById("photography").classList.contains("on")){
+    var dx=Math.abs(mx-.5)<.06?0:mx-.5,dy=Math.abs(my-.5)<.06?0:my-.5;
+    var tvx=reduce?0:(active?dx*.035:.0007),tvy=reduce?0:(active?-dy*.022:0);
+    vx+=(tvx-vx)*.05;vy+=(tvy-vy)*.05;
+    ry+=vx;rx=Math.max(-.9,Math.min(.9,rx+vy));
+    ring.style.transform="translateZ("+D+"px) rotateX("+rx+"rad) rotateY("+ry+"rad)";
+    var cy=Math.cos(ry),sy=Math.sin(ry),cx=Math.cos(rx),sx=Math.sin(rx);
+    slots.forEach(function(o){
+      var z1=-o.x*sy+o.z*cy,z2=o.y*sx+z1*cx,zt=D+R*z2,
+          op=Math.max(0,Math.min(1,(-zt-40)/260)),fy=reduce?0:Math.sin(t*.7+o.i*1.9)*8;
+      o.s.style.transform="rotateY("+o.lon+"rad) rotateX("+o.lat+"rad) translateZ("+(-R)+"px) translateY("+fy+"px)";
+      o.s.style.opacity=op.toFixed(2);o.s.style.visibility=op>.02?"visible":"hidden";
+      o.s.style.pointerEvents=op>.5?"auto":"none";
+    });
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* lightbox */
+var lb=document.getElementById("lb"),box=document.getElementById("box"),cap=document.getElementById("cap"),cur=0,last=null;
+function show(i){cur=(i+P)%P;var p=PHOTOS[cur];lb.style.setProperty("--r",p.r);box.style.setProperty("--r",p.r);box.replaceChildren(media(p,true));cap.textContent=p.t}
+function openLb(i){last=document.activeElement;show(i);lb.classList.add("open");lb.querySelector(".x").focus()}
+function closeLb(){if(!lb.classList.contains("open"))return;lb.classList.remove("open");if(last&&last.focus)last.focus()}
+lb.querySelector(".x").onclick=closeLb;
+lb.querySelector(".p").onclick=function(){show(cur-1)};
+lb.querySelector(".n").onclick=function(){show(cur+1)};
+lb.addEventListener("click",function(e){if(e.target===lb)closeLb()});
+addEventListener("keydown",function(e){
+  if(!lb.classList.contains("open"))return;
+  if(e.key==="Escape")closeLb();
+  if(e.key==="ArrowLeft")show(cur-1);
+  if(e.key==="ArrowRight")show(cur+1);
+});
+route();
+</script>
+</body>
+</html>
