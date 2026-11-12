@@ -37,7 +37,8 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
 .cine.on{display:flex}
 .cine{flex-direction:column;justify-content:center;align-items:center;gap:36px;padding:90px 28px 40px;overflow:auto}
 .reel{position:relative;display:block;width:min(900px,100%);aspect-ratio:16/9;background:#f4f4f4;border:1px solid var(--line);padding:0;color:inherit;cursor:pointer;font:inherit;text-align:left;overflow:hidden}
-.reel iframe{display:block;width:100%;height:100%;border:0}
+.reel .thumb{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.reel iframe{position:absolute;inset:0;display:block;width:100%;height:100%;border:0}
 .reel .tri{position:absolute;left:50%;top:50%;width:0;height:0;border-left:16px solid var(--ink);border-top:10px solid transparent;border-bottom:10px solid transparent;transform:translate(-35%,-50%);transition:transform .3s}
 .reel:hover .tri{transform:translate(-35%,-50%) scale(1.25)}
 .reel .lab{position:absolute;left:14px;bottom:10px}
@@ -69,6 +70,7 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
 
   <section class="page cine" id="cinematography" aria-label="Cinematography">
     <button class="reel" id="reelLink" type="button" aria-label="Play the reel">
+      <img class="thumb" src="https://img.youtube.com/vi/bMZotERnYkQ/hqdefault.jpg" alt="" aria-hidden="true">
       <span class="tri" aria-hidden="true"></span><span class="lab">reel</span>
     </button>
     <div class="films"><span>all films</span><a id="filmsLink" href="#" target="_blank" rel="noopener">view all my films</a></div>
