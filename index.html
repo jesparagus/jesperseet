@@ -36,7 +36,8 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
 /* cinematography */
 .cine.on{display:flex}
 .cine{flex-direction:column;justify-content:center;align-items:center;gap:36px;padding:90px 28px 40px;overflow:auto}
-.reel{position:relative;display:block;width:min(900px,100%);aspect-ratio:16/9;background:#f4f4f4;border:1px solid var(--line)}
+.reel{position:relative;display:block;width:min(900px,100%);aspect-ratio:16/9;background:#f4f4f4;border:1px solid var(--line);padding:0;color:inherit;cursor:pointer;font:inherit;text-align:left;overflow:hidden}
+.reel iframe{display:block;width:100%;height:100%;border:0}
 .reel .tri{position:absolute;left:50%;top:50%;width:0;height:0;border-left:16px solid var(--ink);border-top:10px solid transparent;border-bottom:10px solid transparent;transform:translate(-35%,-50%);transition:transform .3s}
 .reel:hover .tri{transform:translate(-35%,-50%) scale(1.25)}
 .reel .lab{position:absolute;left:14px;bottom:10px}
@@ -67,9 +68,9 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
   </section>
 
   <section class="page cine" id="cinematography" aria-label="Cinematography">
-    <a class="reel" id="reelLink" href="https://youtu.be/bMZotERnYkQ" target="_blank" rel="noopener" aria-label="Watch the reel">
-      <span class="tri"></span><span class="lab">reel</span>
-    </a>
+    <button class="reel" id="reelLink" type="button" aria-label="Play the reel">
+      <span class="tri" aria-hidden="true"></span><span class="lab">reel</span>
+    </button>
     <div class="films"><span>all films</span><a id="filmsLink" href="#" target="_blank" rel="noopener">view all my films</a></div>
   </section>
 </main>
@@ -96,7 +97,16 @@ var PHOTOS = [
  {t:"Coastline",r:1.6,src:""},{t:"Portrait study",r:.8,src:""}
 ];
 /* ====================== */
-document.getElementById("reelLink").href=REEL_URL;
+var reelLink=document.getElementById("reelLink");
+reelLink.addEventListener("click",function(){
+  var iframe=document.createElement("iframe");
+  iframe.src="https://www.youtube-nocookie.com/embed/bMZotERnYkQ?autoplay=1";
+  iframe.title="Jesper's cinematography reel";
+  iframe.allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+  iframe.allowFullscreen=true;
+  reelLink.replaceChildren(iframe);
+  reelLink.setAttribute("aria-label","Cinematography reel video player");
+});
 document.getElementById("filmsLink").href=FILMS_URL;
 var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 
