@@ -14,7 +14,7 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{background:var(--bg);color:var(--ink);font:300 12px/1.6 "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow:hidden}
 a{color:inherit;text-decoration:none}
 :focus-visible{outline:1px solid var(--ink);outline-offset:3px}
-header{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;display:flex;justify-content:space-between;padding:22px 28px;z-index:10}
+header{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;display:flex;justify-content:space-between;padding:22px 28px;z-index:100;transform:translateZ(0)}
 nav a{margin-left:22px;color:var(--mute)}
 nav a:hover,nav a[aria-current="page"]{color:var(--ink)}
 nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
@@ -22,7 +22,7 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
 .page.on{display:block}
 
 /* curved gallery */
-#stagePh{position:absolute;inset:0;perspective:900px;perspective-origin:50% 50%;overflow:hidden;touch-action:pan-y}
+#stagePh{position:absolute;inset:0;isolation:isolate;z-index:0;perspective:900px;perspective-origin:50% 50%;overflow:hidden;touch-action:pan-y}
 #ring{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d}
 .slot{position:absolute;left:0;top:0;transform-style:preserve-3d;backface-visibility:hidden}
 .tile{position:absolute;display:block;padding:0;border:0;background:none;cursor:pointer;
@@ -35,15 +35,23 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
 
 /* cinematography */
 .cine.on{display:flex}
-.cine{flex-direction:column;justify-content:center;align-items:center;gap:36px;padding:90px 28px 40px;overflow:auto}
-.reel{position:relative;display:block;width:min(900px,100%);aspect-ratio:16/9;background:#f4f4f4;border:1px solid var(--line);padding:0;color:inherit;cursor:pointer;font:inherit;text-align:left;overflow:hidden}
+.cine{flex-direction:column;justify-content:flex-start;justify-content:safe center;align-items:center;gap:36px;padding:90px 28px 60px;overflow:auto}
+.reel{position:relative;display:block;width:min(900px,100%);aspect-ratio:16/9;background:#f4f4f4;border:1px solid var(--line);padding:0;color:inherit;cursor:pointer;font:inherit;text-align:left;overflow:hidden;flex:none}
 .reel .thumb{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;pointer-events:none}
 .reel iframe{position:absolute;inset:0;display:block;width:100%;height:100%;border:0}
 .reel .tri{position:absolute;left:50%;top:50%;width:0;height:0;border-left:16px solid var(--ink);border-top:10px solid transparent;border-bottom:10px solid transparent;transform:translate(-35%,-50%);transition:transform .3s}
 .reel:hover .tri{transform:translate(-35%,-50%) scale(1.25)}
 .reel .lab{position:absolute;left:14px;bottom:10px}
-.films{width:min(900px,100%);display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:16px}
-.films a{border-bottom:1px solid var(--ink)}
+.films{width:min(900px,100%);border-top:1px solid var(--line);padding-top:16px;flex:none}
+.films>span{display:block;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.film{position:relative;display:block;aspect-ratio:16/9;background:#f4f4f4;overflow:hidden}
+.film img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.film:hover img,.film:focus-visible img{transform:scale(1.05)}
+.film .info{position:absolute;left:0;right:0;bottom:0;padding:24px 10px 8px;background:linear-gradient(transparent,rgba(0,0,0,.78));color:#fff;opacity:0;transition:opacity .3s;display:flex;justify-content:space-between;gap:8px;line-height:1.3}
+.film:hover .info,.film:focus-visible .info{opacity:1}
+.film .rt{white-space:nowrap}
+@media (hover:none){.film .info{opacity:1}}
 
 /* lightbox */
 #lb{position:fixed;inset:0;background:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:30;padding:60px 28px}
@@ -73,7 +81,7 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
       <img class="thumb" src="https://img.youtube.com/vi/bMZotERnYkQ/hqdefault.jpg" alt="" aria-hidden="true">
       <span class="tri" aria-hidden="true"></span><span class="lab">reel</span>
     </button>
-    <div class="films"><span>all films</span><a id="filmsLink" href="#" target="_blank" rel="noopener">view all my films</a></div>
+    <div class="films"><span>films</span><div class="grid" id="films"></div></div>
   </section>
 </main>
 
@@ -87,7 +95,15 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
 <script>
 /* ===== EDIT THESE ===== */
 var REEL_URL  = "https://youtu.be/bMZotERnYkQ";   // your reel link (Vimeo / YouTube)
-var FILMS_URL = "#";   // page listing all your films
+/* Films: thumbnails come from YouTube. Title and runtime fill in automatically;
+   to set them yourself, add title:"..." and/or runtime:"4:12" to an entry. */
+var FILMS = [
+ {id:"q6GLVGwi1qI",title:"baby blue hullabaloo (2026)"},
+ {id:"cigl2eV8Z-s",title:"dustbowl (2025)"},
+ {id:"pBcS-4kiMvM",title:"dead weight (2025)"},
+ {id:"Onw108cnFNs",title:"monkey business (2025)"},
+ {id:"_ZccQKu-kQ4",title:"prohohoibition (2023)"}
+];
 /* t = title, r = width/height ratio, src = image ("" shows a placeholder) */
 var PHOTOS = [
  {t:"Golden hour, Huntington",r:1.5,src:""},{t:"Barber shop portrait",r:.8,src:""},
@@ -109,7 +125,7 @@ reelLink.addEventListener("click",function(){
   reelLink.replaceChildren(iframe);
   reelLink.setAttribute("aria-label","Cinematography reel video player");
 });
-document.getElementById("filmsLink").href=FILMS_URL;
+
 var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 function media(p,lg,seed){
@@ -126,6 +142,15 @@ function route(){
   if(h!=="photography")closeLb();
 }
 addEventListener("hashchange",route);
+addEventListener("popstate",route);
+document.querySelectorAll("header a").forEach(function(a){
+  a.addEventListener("click",function(e){
+    var h=a.getAttribute("href");if(!h||h.charAt(0)!=="#")return;
+    e.preventDefault();
+    if(location.hash!==h){try{history.pushState(null,"",h)}catch(x){location.hash=h}}
+    route();
+  });
+});
 
 /* spherical gallery: tiles sit on the inside of a sphere */
 var ring=document.getElementById("ring"),P=PHOTOS.length,N=36,slots=[],R=640,D=96,W=300;
@@ -183,6 +208,42 @@ addEventListener("keydown",function(e){
   if(e.key==="ArrowLeft")show(cur-1);
   if(e.key==="ArrowRight")show(cur+1);
 });
+try{
+/* films grid */
+function fmt(sec){sec=Math.round(sec);var h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),r=sec%60,p=function(n){return ("0"+n).slice(-2)};return h?h+":"+p(m)+":"+p(r):m+":"+p(r)}
+var filmsEl=document.getElementById("films");
+FILMS.forEach(function(f){
+  var a=document.createElement("a");a.className="film";a.href="https://youtu.be/"+f.id;a.target="_blank";a.rel="noopener";
+  a.setAttribute("aria-label",(f.title||"Film")+" — watch on YouTube");
+  var im=document.createElement("img");im.src="https://img.youtube.com/vi/"+f.id+"/hqdefault.jpg";im.alt="";im.loading="lazy";
+  var info=document.createElement("span");info.className="info";
+  var ti=document.createElement("span");ti.textContent=f.title||"";
+  var rt=document.createElement("span");rt.className="rt";rt.textContent=f.runtime||"";
+  info.appendChild(ti);info.appendChild(rt);a.appendChild(im);a.appendChild(info);filmsEl.appendChild(a);f.rt=rt;
+  if(!f.title&&window.fetch){
+    fetch("https://www.youtube.com/oembed?format=json&url="+encodeURIComponent("https://youtu.be/"+f.id))
+      .then(function(r){return r.json()}).then(function(d){ti.textContent=d.title;a.setAttribute("aria-label",d.title+" — watch on YouTube")}).catch(function(){});
+  }
+});
+/* runtimes: read from hidden YouTube players, one per film */
+function loadRuntimes(){
+  var need=FILMS.filter(function(f){return !f.runtime});if(!need.length)return;
+  function go(){
+    var host=document.createElement("div");host.setAttribute("aria-hidden","true");
+    host.style.cssText="position:absolute;width:1px;height:1px;left:-9999px;overflow:hidden";document.body.appendChild(host);
+    need.forEach(function(f){
+      var el=document.createElement("div");host.appendChild(el);
+      new YT.Player(el,{width:"1",height:"1",videoId:f.id,playerVars:{controls:0,playsinline:1},events:{onReady:function(e){
+        var n=0,iv=setInterval(function(){var d=e.target.getDuration();n++;
+          if(d>0){clearInterval(iv);f.rt.textContent=fmt(d);e.target.destroy()}
+          else if(n>25){clearInterval(iv);e.target.destroy()}},400)}}});
+    });
+  }
+  if(window.YT&&YT.Player)go();
+  else{window.onYouTubeIframeAPIReady=go;var sc=document.createElement("script");sc.src="https://www.youtube.com/iframe_api";document.head.appendChild(sc)}
+}
+loadRuntimes();
+}catch(err){}
 route();
 </script>
 </body>
