@@ -127,14 +127,14 @@ var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 function media(p,thumb,seed){
  var i=document.createElement("img");i.src=encodeURI(thumb||p.src);i.alt=p.t;i.loading=thumb?"lazy":"eager";i.decoding="async";
- i.onload=function(){if(!thumb){var w=i.naturalWidth,h=i.naturalHeight;if(w&&h)p.r=w/h}};
+ i.onload=function(){var w=i.naturalWidth,h=i.naturalHeight;if(w&&h){p.r=w/h;if(thumb){size()}else if(typeof box!=="undefined"){lb.style.setProperty("--r",p.r);box.style.setProperty("--r",p.r)}}};
  return i;
 }
 
 function route(){var h=location.hash.slice(1)==="cinematography"?"cinematography":"photography";document.querySelectorAll(".page").forEach(function(s){s.classList.toggle("on",s.id===h)});document.querySelectorAll("nav a").forEach(function(a){a.toggleAttribute("aria-current",a.dataset.p===h);if(a.dataset.p===h)a.setAttribute("aria-current","page")});if(h!=="photography")closeLb()}addEventListener("hashchange",route);
 
 var ring=document.getElementById("ring"),P=PHOTOS.length,N=36,slots=[],R=640,D=96,W=300;
-function size(){var m=innerWidth<720;R=m?380:640;D=R*.15;W=m?170:Math.min(320,innerWidth*.23);slots.forEach(function(o){var w=o.p.r<1?W*.72:W,h=w/o.p.r;o.b.style.cssText="width:"+w+"px;height:"+h+"px;left:"+(-w/2)+"px;top:"+(-h/2)+"px"})}
+function size(){var m=innerWidth<720;R=m?380:640;D=R*.55;W=m?170:Math.min(320,innerWidth*.23);slots.forEach(function(o){var w=o.p.r>=1?W:W*o.p.r,h=o.p.r>=1?W/o.p.r:W;o.b.style.cssText="width:"+w+"px;height:"+h+"px;left:"+(-w/2)+"px;top:"+(-h/2)+"px"})}
 var GA=Math.PI*(3-Math.sqrt(5));
 for(var i=0;i<N;i++)(function(i){var p=PHOTOS[i%P],lat=Math.asin((1-2*(i+.5)/N)*.88),lon=i*GA;var s=document.createElement("div");s.className="slot";var b=document.createElement("button");b.className="tile";b.type="button";b.setAttribute("aria-label","Open "+p.t);b.appendChild(media(p,p.thumb,i));var c=document.createElement("span");c.className="cap";c.textContent=p.t;b.appendChild(c);b.addEventListener("click",function(){openLb(i%P)});s.appendChild(b);ring.appendChild(s);slots.push({s:s,b:b,p:p,i:i,lat:lat,lon:lon,x:-Math.cos(lat)*Math.sin(lon),y:Math.sin(lat),z:-Math.cos(lat)*Math.cos(lon)})})(i);
 size();addEventListener("resize",size);
