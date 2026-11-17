@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>jesper seet - creative portfolio</title>
+<title>Jesper — Photography & Cinematography</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#fff;--ink:#111;--mute:#8a8a8a;--line:#e4e4e4;color-scheme:light;
@@ -22,13 +22,14 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
 .page.on{display:block}
 
 /* curved gallery */
-#stagePh{position:absolute;inset:0;isolation:isolate;z-index:0;perspective:900px;perspective-origin:50% 50%;overflow:hidden;touch-action:pan-y}
+#stagePh{position:absolute;inset:0;perspective:900px;perspective-origin:50% 50%;overflow:hidden;touch-action:pan-y}
 #ring{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d}
 .slot{position:absolute;left:0;top:0;transform-style:preserve-3d;backface-visibility:hidden}
-.tile{position:absolute;display:block;padding:0;border:0;background:none;cursor:pointer;
+.tile{position:absolute;display:block;padding:0;border:0;background:none;cursor:pointer;overflow:visible;
  transform:translateZ(0);transition:transform .45s cubic-bezier(.2,.7,.2,1)}
 .tile:hover,.tile:focus-visible{transform:translateZ(70px) scale(1.06)}
-.tile .ph,.tile img{display:block;width:100%;height:100%;object-fit:cover}
+.tile img{display:block;width:100%;height:100%;object-fit:contain}
+.tile .ph{display:block;width:100%;height:100%}
 .tile .cap{position:absolute;left:0;top:calc(100% + 8px);white-space:nowrap;color:var(--ink);opacity:0;transition:opacity .3s}
 .tile:hover .cap,.tile:focus-visible .cap{opacity:1}
 .note{position:absolute;left:28px;bottom:calc(22px + env(safe-area-inset-bottom,0px));color:var(--mute)}
@@ -42,16 +43,7 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
 .reel .tri{position:absolute;left:50%;top:50%;width:0;height:0;border-left:16px solid var(--ink);border-top:10px solid transparent;border-bottom:10px solid transparent;transform:translate(-35%,-50%);transition:transform .3s}
 .reel:hover .tri{transform:translate(-35%,-50%) scale(1.25)}
 .reel .lab{position:absolute;left:14px;bottom:10px}
-.films{width:min(900px,100%);border-top:1px solid var(--line);padding-top:16px;flex:none}
-.films>span{display:block;margin-bottom:14px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
-.film{position:relative;display:block;aspect-ratio:16/9;background:#f4f4f4;overflow:hidden}
-.film img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
-.film:hover img,.film:focus-visible img{transform:scale(1.05)}
-.film .info{position:absolute;left:0;right:0;bottom:0;padding:24px 10px 8px;background:linear-gradient(transparent,rgba(0,0,0,.78));color:#fff;opacity:0;transition:opacity .3s;display:flex;justify-content:space-between;gap:8px}
-.film:hover .info,.film:focus-visible .info{opacity:1}
-.film .rt{white-space:nowrap}
-@media (hover:none){.film .info{opacity:1}}
+.films{width:min(900px,100%);border-top:1px solid var(--line);padding-top:16px}
 
 /* lightbox */
 #lb{position:fixed;inset:0;background:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:30;padding:60px 28px}
@@ -66,7 +58,7 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
 </head>
 <body>
 <header>
-  <a href="#photography">jesper seet</a>
+  <a href="#photography">Jesper</a>
   <nav><a href="#photography" data-p="photography">photography</a><a href="#cinematography" data-p="cinematography">cinematography</a></nav>
 </header>
 
@@ -81,7 +73,7 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
       <img class="thumb" src="https://img.youtube.com/vi/bMZotERnYkQ/hqdefault.jpg" alt="" aria-hidden="true">
       <span class="tri" aria-hidden="true"></span><span class="lab">reel</span>
     </button>
-    <div class="films"><span>films</span><div class="grid" id="films"></div></div>
+    <div class="films"><span>all films</span></div>
   </section>
 </main>
 
@@ -94,139 +86,66 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
 
 <script>
 /* ===== EDIT THESE ===== */
-var REEL_URL = "https://youtu.be/bMZotERnYkQ";
-var FILMS = [
- {id:"q6GLVGwi1qI",title:"baby blue hullabaloo (2026)"},
- {id:"cigl2eV8Z-s",title:"dustbowl (2025)"},
- {id:"pBcS-4kiMvM",title:"dead weight (2025)"},
- {id:"Onw108cnFNs",title:"monkey business (2025)"},
- {id:"_ZccQKu-kQ4",title:"prohohoibition (2023)"}
-];
-var PHOTOS = [
- {t:"Camp",r:1.5,src:"Camp.jpg"},
- {t:"Chicken Sprint",r:1.5,src:"Chicken Sprint.jpg"},
- {t:"Chicken Vendor",r:1.5,src:"Chicken Vendor.jpg"},
- {t:"Fabric",r:1.5,src:"Fabric.jpg"},
- {t:"Future Gaze",r:1.5,src:"Future Gaze.jpg"},
- {t:"Girl Feeds Pigeons",r:1.5,src:"Girl Feeds Pigeons.jpg"},
- {t:"Japan Crosswalk",r:1.5,src:"Japan Crosswalk.jpg"},
- {t:"Kian Heng Jade and Jewellery",r:1.5,src:"Kian Heng Jade and Jewellery.jpg"},
- {t:"Malaysian Farmers",r:1.5,src:"Malaysian Farmers.jpg"},
- {t:"Mantis",r:1.5,src:"Mantis.jpg"},
- {t:"Mother and Son",r:1.5,src:"Mother and Son.jpg"},
- {t:"National Youth Leadership Training Camp",r:1.5,src:"National Youth Leadership Training Camp.jpg"},
- {t:"Punk Rockin",r:1.5,src:"Punk Rockin.jpg"},
- {t:"Rest",r:1.5,src:"Rest.jpg"},
- {t:"Smoke Break",r:1.5,src:"Smoke Break.jpg"},
- {t:"Street Vendor in Malaysia",r:1.5,src:"Street Vendor in Malaysia.jpg"},
- {t:"Sunrise on the Colorado River",r:1.5,src:"Sunrise on the Colorado River.jpg"},
- {t:"Sunset Hike",r:1.5,src:"Sunset Hike.jpg"},
- {t:"The Kids are Gonna Be Ok 1",r:1.5,src:"The Kids are Gonna Be Ok 1.jpg"},
- {t:"The Kids are Gonna Be Ok 2",r:1.5,src:"The Kids are Gonna Be Ok 2.jpg"},
- {t:"The Kids are Gonna Be Ok 3",r:1.5,src:"The Kids are Gonna Be Ok 3.jpg"},
- {t:"The Kids are Gonna Be Ok 4",r:1.5,src:"The Kids are Gonna Be Ok 4.jpg"},
- {t:"Untitled",r:1.5,src:"Untitled.jpg"},
- {t:"Untitled",r:1.5,src:"Untitled (2).jpg"},
- {t:"Untitled",r:1.5,src:"Untitled (3).jpg"},
- {t:"Untitled",r:1.5,src:"Untitled (4).jpg"},
- {t:"Untitled",r:1.5,src:"Untitled (5).jpg"},
- {t:"Untitled",r:1.5,src:"Untitled (6).jpg"},
- {t:"Untitled",r:1.5,src:"Untitled (7).jpg"},
- {t:"Untitled",r:1.5,src:"Untitled (8).jpg"}
+var REEL_URL="https://youtu.be/bMZotERnYkQ";
+var FILMS_URL="#";
+var PHOTOS=[
+ {t:"Camp",r:1.5,src:"Camp.jpg",thumb:"thumbnails/Camp (Thumb).jpg"},
+ {t:"Chicken Sprint",r:1.5,src:"Chicken Sprint.jpg",thumb:"thumbnails/Chicken Sprint (Thumb).jpg"},
+ {t:"Chicken Vendor",r:1.5,src:"Chicken Vendor.jpg",thumb:"thumbnails/Chicken Vendor (Thumb).jpg"},
+ {t:"Fabric",r:1.5,src:"Fabric.jpg",thumb:"thumbnails/Fabric (Thumb).jpg"},
+ {t:"Future Gaze",r:1.5,src:"Future Gaze.jpg",thumb:"thumbnails/Future Gaze (Thumb).jpg"},
+ {t:"Girl Feeds Pigeons",r:1.5,src:"Girl Feeds Pigeons.jpg",thumb:"thumbnails/Girl Feeds Pigeons (Thumb).jpg"},
+ {t:"Japan Crosswalk",r:1.5,src:"Japan Crosswalk.jpg",thumb:"thumbnails/Japan Crosswalk (Thumb).jpg"},
+ {t:"Kian Heng Jade and Jewellery",r:1.5,src:"Kian Heng Jade and Jewellery.jpg",thumb:"thumbnails/Kian Heng Jade and Jewellery (Thumb).jpg"},
+ {t:"Malaysian Farmers",r:1.5,src:"Malaysian Farmers.jpg",thumb:"thumbnails/Malaysian Farmers (Thumb).jpg"},
+ {t:"Mantis",r:1.5,src:"Mantis.jpg",thumb:"thumbnails/Mantis (Thumb).jpg"},
+ {t:"Mother and Son",r:1.5,src:"Mother and Son.jpg",thumb:"thumbnails/Mother and Son (Thumb).jpg"},
+ {t:"National Youth Leadership Training Camp",r:1.5,src:"National Youth Leadership Training Camp.jpg",thumb:"thumbnails/National Youth Leadership Training Camp (Thumb).jpg"},
+ {t:"Punk Rockin",r:1.5,src:"Punk Rockin.jpg",thumb:"thumbnails/Punk Rockin (Thumb).jpg"},
+ {t:"Rest",r:1.5,src:"Rest.jpg",thumb:"thumbnails/Rest (Thumb).jpg"},
+ {t:"Smoke Break",r:1.5,src:"Smoke Break.jpg",thumb:"thumbnails/Smoke Break (Thumb).jpg"},
+ {t:"Street Vendor in Malaysia",r:1.5,src:"Street Vendor in Malaysia.jpg",thumb:"thumbnails/Street Vendor in Malaysia (Thumb).jpg"},
+ {t:"Sunrise on the Colorado River",r:1.5,src:"Sunrise on the Colorado River.jpg",thumb:"thumbnails/Sunrise on the Colorado River (Thumb).jpg"},
+ {t:"Sunset Hike",r:1.5,src:"Sunset Hike.jpg",thumb:"thumbnails/Sunset Hike (Thumb).jpg"},
+ {t:"The Kids are Gonna Be Ok 1",r:1.5,src:"The Kids are Gonna Be Ok 1.jpg",thumb:"thumbnails/The Kids are Gonna Be Ok 1 (Thumb).jpg"},
+ {t:"The Kids are Gonna Be Ok 2",r:1.5,src:"The Kids are Gonna Be Ok 2.jpg",thumb:"thumbnails/The Kids are Gonna Be Ok 2 (Thumb).jpg"},
+ {t:"The Kids are Gonna Be Ok 3",r:1.5,src:"The Kids are Gonna Be Ok 3.jpg",thumb:"thumbnails/The Kids are Gonna Be Ok 3 (Thumb).jpg"},
+ {t:"The Kids are Gonna Be Ok 4",r:1.5,src:"The Kids are Gonna Be Ok 4.jpg",thumb:"thumbnails/The Kids are Gonna Be Ok 4 (Thumb).jpg"},
+ {t:"Untitled",r:1.5,src:"Untitled.jpg",thumb:"thumbnails/Untitled (Thumb).jpg"},
+ {t:"Untitled",r:1.5,src:"Untitled (2).jpg",thumb:"thumbnails/Untitled (2) (Thumb).jpg"},
+ {t:"Untitled",r:1.5,src:"Untitled (3).jpg",thumb:"thumbnails/Untitled (3) (Thumb).jpg"},
+ {t:"Untitled",r:1.5,src:"Untitled (4).jpg",thumb:"thumbnails/Untitled (4) (Thumb).jpg"},
+ {t:"Untitled",r:1.5,src:"Untitled (5).jpg",thumb:"thumbnails/Untitled (5) (Thumb).jpg"},
+ {t:"Untitled",r:1.5,src:"Untitled (6).jpg",thumb:"thumbnails/Untitled (6) (Thumb).jpg"},
+ {t:"Untitled",r:1.5,src:"Untitled (7).jpg",thumb:"thumbnails/Untitled (7) (Thumb).jpg"},
+ {t:"Untitled",r:1.5,src:"Untitled (8).jpg",thumb:"thumbnails/Untitled (8) (Thumb).jpg"}
 ];
 /* ====================== */
 var reelLink=document.getElementById("reelLink");
-reelLink.addEventListener("click",function(){
-  var iframe=document.createElement("iframe");
-  iframe.src="https://www.youtube-nocookie.com/embed/bMZotERnYkQ?autoplay=1";
-  iframe.title="Jesper's cinematography reel";
-  iframe.allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-  iframe.allowFullscreen=true;
-  reelLink.replaceChildren(iframe);
-  reelLink.setAttribute("aria-label","Cinematography reel video player");
-});
+reelLink.addEventListener("click",function(){var f=document.createElement("iframe");f.src="https://www.youtube-nocookie.com/embed/bMZotERnYkQ?autoplay=1";f.title="Jesper's cinematography reel";f.allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";f.allowFullscreen=true;reelLink.replaceChildren(f)});
 var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-function media(p,lg,seed){
-  if(p.src){var i=document.createElement("img");i.src=encodeURI(p.src);i.alt=p.t;return i;}
-  var d=document.createElement("div");d.className="ph";d.setAttribute("role","img");d.setAttribute("aria-label",p.t+" (placeholder)");
-  var h=((seed==null?p.t.length:seed)*37)%360;d.style.background="linear-gradient(170deg,hsl("+h+" 22% 80%) 0%,hsl("+((h+30)%360)+" 26% 62%) 55%,hsl("+((h+60)%360)+" 22% 36%) 100%)";return d;
+function media(p,thumb,seed){
+ var i=document.createElement("img");i.src=encodeURI(thumb||p.src);i.alt=p.t;i.loading=thumb?"lazy":"eager";i.decoding="async";
+ i.onload=function(){if(!thumb){var w=i.naturalWidth,h=i.naturalHeight;if(w&&h)p.r=w/h}};
+ return i;
 }
 
-function route(){
-  var h=location.hash.slice(1)==="cinematography"?"cinematography":"photography";
-  document.querySelectorAll(".page").forEach(function(s){s.classList.toggle("on",s.id===h)});
-  document.querySelectorAll("nav a").forEach(function(a){a.toggleAttribute("aria-current",a.dataset.p===h);if(a.dataset.p===h)a.setAttribute("aria-current","page")});
-  if(h!=="photography")closeLb();
-}
-addEventListener("hashchange",route);
-addEventListener("popstate",route);
-document.querySelectorAll("header a").forEach(function(a){
-  a.addEventListener("click",function(e){var h=a.getAttribute("href");if(!h||h.charAt(0)!=="#")return;e.preventDefault();if(location.hash!==h){try{history.pushState(null,"",h)}catch(x){location.hash=h}}route();});
-});
+function route(){var h=location.hash.slice(1)==="cinematography"?"cinematography":"photography";document.querySelectorAll(".page").forEach(function(s){s.classList.toggle("on",s.id===h)});document.querySelectorAll("nav a").forEach(function(a){a.toggleAttribute("aria-current",a.dataset.p===h);if(a.dataset.p===h)a.setAttribute("aria-current","page")});if(h!=="photography")closeLb()}addEventListener("hashchange",route);
 
 var ring=document.getElementById("ring"),P=PHOTOS.length,N=36,slots=[],R=640,D=96,W=300;
-function size(){var m=innerWidth<720;R=m?380:640;D=R*.15;W=m?170:Math.min(320,innerWidth*.23);
-  slots.forEach(function(o){var w=o.p.r<1?W*.72:W,h=w/o.p.r;o.b.style.cssText="width:"+w+"px;height:"+h+"px;left:"+(-w/2)+"px;top:"+(-h/2)+"px"})}
+function size(){var m=innerWidth<720;R=m?380:640;D=R*.15;W=m?170:Math.min(320,innerWidth*.23);slots.forEach(function(o){var w=o.p.r<1?W*.72:W,h=w/o.p.r;o.b.style.cssText="width:"+w+"px;height:"+h+"px;left:"+(-w/2)+"px;top:"+(-h/2)+"px"})}
 var GA=Math.PI*(3-Math.sqrt(5));
-for(var i=0;i<N;i++)(function(i){
-  var p=PHOTOS[i%P],lat=Math.asin((1-2*(i+.5)/N)*.88),lon=i*GA;
-  var s=document.createElement("div");s.className="slot";
-  var b=document.createElement("button");b.className="tile";b.type="button";b.setAttribute("aria-label","Open "+p.t);
-  b.appendChild(media(p,false,i));var c=document.createElement("span");c.className="cap";c.textContent=p.t;b.appendChild(c);
-  b.addEventListener("click",function(){openLb(i%P)});
-  s.appendChild(b);ring.appendChild(s);
-  slots.push({s:s,b:b,p:p,i:i,lat:lat,lon:lon,x:-Math.cos(lat)*Math.sin(lon),y:Math.sin(lat),z:-Math.cos(lat)*Math.cos(lon)});
-})(i);
+for(var i=0;i<N;i++)(function(i){var p=PHOTOS[i%P],lat=Math.asin((1-2*(i+.5)/N)*.88),lon=i*GA;var s=document.createElement("div");s.className="slot";var b=document.createElement("button");b.className="tile";b.type="button";b.setAttribute("aria-label","Open "+p.t);b.appendChild(media(p,p.thumb,i));var c=document.createElement("span");c.className="cap";c.textContent=p.t;b.appendChild(c);b.addEventListener("click",function(){openLb(i%P)});s.appendChild(b);ring.appendChild(s);slots.push({s:s,b:b,p:p,i:i,lat:lat,lon:lon,x:-Math.cos(lat)*Math.sin(lon),y:Math.sin(lat),z:-Math.cos(lat)*Math.cos(lon)})})(i);
 size();addEventListener("resize",size);
 
-var ry=0,rx=0,vx=0,vy=0,mx=.5,my=.5,active=false,t0=performance.now();
-var stage=document.getElementById("stagePh");
-stage.addEventListener("pointermove",function(e){var r=stage.getBoundingClientRect();mx=(e.clientX-r.left)/r.width;my=(e.clientY-r.top)/r.height;active=true});
-stage.addEventListener("pointerleave",function(){active=false});
-function frame(now){
-  var t=(now-t0)/1000;
-  if(document.getElementById("photography").classList.contains("on")){
-    var dx=Math.abs(mx-.5)<.06?0:mx-.5,dy=Math.abs(my-.5)<.06?0:my-.5;
-    var tvx=reduce?0:(active?dx*.035:.0007),tvy=reduce?0:(active?-dy*.022:0);
-    vx+=(tvx-vx)*.05;vy+=(tvy-vy)*.05;
-    ry+=vx;rx=Math.max(-.9,Math.min(.9,rx+vy));
-    ring.style.transform="translateZ("+D+"px) rotateX("+rx+"rad) rotateY("+ry+"rad)";
-    var cy=Math.cos(ry),sy=Math.sin(ry),cx=Math.cos(rx),sx=Math.sin(rx);
-    slots.forEach(function(o){
-      var z1=-o.x*sy+o.z*cy,z2=o.y*sx+z1*cx,zt=D+R*z2,
-          op=Math.max(0,Math.min(1,(-zt-40)/260)),fy=reduce?0:Math.sin(t*.7+o.i*1.9)*8;
-      o.s.style.transform="rotateY("+o.lon+"rad) rotateX("+o.lat+"rad) translateZ("+(-R)+"px) translateY("+fy+"px)";
-      o.s.style.opacity=op.toFixed(2);o.s.style.visibility=op>.02?"visible":"hidden";
-      o.s.style.pointerEvents=op>.5?"auto":"none";
-    });
-  }
-  requestAnimationFrame(frame);
-}
-requestAnimationFrame(frame);
+var ry=0,rx=0,vx=0,vy=0,mx=.5,my=.5,active=false,t0=performance.now();var stage=document.getElementById("stagePh");stage.addEventListener("pointermove",function(e){var r=stage.getBoundingClientRect();mx=(e.clientX-r.left)/r.width;my=(e.clientY-r.top)/r.height;active=true});stage.addEventListener("pointerleave",function(){active=false});
+function frame(now){var t=(now-t0)/1000;if(document.getElementById("photography").classList.contains("on")){var dx=Math.abs(mx-.5)<.06?0:mx-.5,dy=Math.abs(my-.5)<.06?0:my-.5;var tvx=reduce?0:(active?dx*.035:.0007),tvy=reduce?0:(active?-dy*.022:0);vx+=(tvx-vx)*.05;vy+=(tvy-vy)*.05;ry+=vx;rx=Math.max(-.9,Math.min(.9,rx+vy));ring.style.transform="translateZ("+D+"px) rotateX("+rx+"rad) rotateY("+ry+"rad)";var cy=Math.cos(ry),sy=Math.sin(ry),cx=Math.cos(rx),sx=Math.sin(rx);slots.forEach(function(o){var z1=-o.x*sy+o.z*cy,z2=o.y*sx+z1*cx,zt=D+R*z2,op=Math.max(0,Math.min(1,(-zt-40)/260)),fy=reduce?0:Math.sin(t*.7+o.i*1.9)*8;o.s.style.transform="rotateY("+o.lon+"rad) rotateX("+o.lat+"rad) translateZ("+(-R)+"px) translateY("+fy+"px)";o.s.style.opacity=op.toFixed(2);o.s.style.visibility=op>.02?"visible":"hidden";o.s.style.pointerEvents=op>.5?"auto":"none"})}requestAnimationFrame(frame)}requestAnimationFrame(frame);
 
 var lb=document.getElementById("lb"),box=document.getElementById("box"),cap=document.getElementById("cap"),cur=0,last=null;
-function show(i){cur=(i+P)%P;var p=PHOTOS[cur];lb.style.setProperty("--r",p.r);box.style.setProperty("--r",p.r);box.replaceChildren(media(p,true));cap.textContent=p.t}
-function openLb(i){last=document.activeElement;show(i);lb.classList.add("open");lb.querySelector(".x").focus()}
-function closeLb(){if(!lb.classList.contains("open"))return;lb.classList.remove("open");if(last&&last.focus)last.focus()}
-lb.querySelector(".x").onclick=closeLb;
-lb.querySelector(".p").onclick=function(){show(cur-1)};
-lb.querySelector(".n").onclick=function(){show(cur+1)};
-lb.addEventListener("click",function(e){if(e.target===lb)closeLb()});
-addEventListener("keydown",function(e){if(!lb.classList.contains("open"))return;if(e.key==="Escape")closeLb();if(e.key==="ArrowLeft")show(cur-1);if(e.key==="ArrowRight")show(cur+1);});
-
-try{
-var filmsEl=document.getElementById("films");
-function fmt(sec){sec=Math.round(sec);var h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),r=sec%60,p=function(n){return("0"+n).slice(-2)};return h?h+":"+p(m)+":"+p(r):m+":"+p(r)}
-FILMS.forEach(function(f){
- var a=document.createElement("a");a.className="film";a.href="https://youtu.be/"+f.id;a.target="_blank";a.rel="noopener";a.setAttribute("aria-label",(f.title||"Film")+" — watch on YouTube");
- var im=document.createElement("img");im.src="https://img.youtube.com/vi/"+f.id+"/hqdefault.jpg";im.alt="";im.loading="lazy";
- var info=document.createElement("span");info.className="info";var ti=document.createElement("span");ti.textContent=f.title||"";var rt=document.createElement("span");rt.className="rt";rt.textContent="";
- info.appendChild(ti);info.appendChild(rt);a.appendChild(im);a.appendChild(info);filmsEl.appendChild(a);f.rt=rt;
-});
-function loadRuntimes(){var need=FILMS.filter(function(f){return !f.runtime});if(!need.length)return;function go(){var host=document.createElement("div");host.setAttribute("aria-hidden","true");host.style.cssText="position:absolute;width:1px;height:1px;left:-9999px;overflow:hidden";document.body.appendChild(host);need.forEach(function(f){var el=document.createElement("div");host.appendChild(el);new YT.Player(el,{width:"1",height:"1",videoId:f.id,playerVars:{controls:0,playsinline:1},events:{onReady:function(e){var n=0,iv=setInterval(function(){var d=e.target.getDuration();n++;if(d>0){clearInterval(iv);f.rt.textContent=fmt(d);e.target.destroy()}else if(n>25){clearInterval(iv);e.target.destroy()}},400)}}});});}if(window.YT&&YT.Player)go();else{window.onYouTubeIframeAPIReady=go;var sc=document.createElement("script");sc.src="https://www.youtube.com/iframe_api";document.head.appendChild(sc)}}loadRuntimes();
-}catch(err){}
-route();
+function show(i){cur=(i+P)%P;var p=PHOTOS[cur];lb.style.setProperty("--r",p.r);box.style.setProperty("--r",p.r);box.replaceChildren(media(p,false));cap.textContent=p.t}
+function openLb(i){last=document.activeElement;show(i);lb.classList.add("open");lb.querySelector(".x").focus()}function closeLb(){if(!lb.classList.contains("open"))return;lb.classList.remove("open");if(last&&last.focus)last.focus()}
+lb.querySelector(".x").onclick=closeLb;lb.querySelector(".p").onclick=function(){show(cur-1)};lb.querySelector(".n").onclick=function(){show(cur+1)};lb.addEventListener("click",function(e){if(e.target===lb)closeLb()});addEventListener("keydown",function(e){if(!lb.classList.contains("open"))return;if(e.key==="Escape")closeLb();if(e.key==="ArrowLeft")show(cur-1);if(e.key==="ArrowRight")show(cur+1)});route();
 </script>
 </body>
 </html>
