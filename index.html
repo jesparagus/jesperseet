@@ -32,7 +32,11 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
 .tile .ph{display:block;width:100%;height:100%}
 .tile .cap{position:absolute;left:0;top:calc(100% + 8px);white-space:nowrap;color:var(--ink);opacity:0;transition:opacity .3s}
 .tile:hover .cap,.tile:focus-visible .cap{opacity:1}
-.note{position:absolute;left:calc(28px*var(--s));bottom:calc(22px*var(--s) + env(safe-area-inset-bottom,0px));color:var(--mute)}
+.dock{position:absolute;left:calc(28px*var(--s));bottom:calc(22px*var(--s) + env(safe-area-inset-bottom,0px));z-index:5}
+.socials{display:flex;align-items:center;gap:calc(18px*var(--s))}
+.socials a{display:block;line-height:0;color:var(--mute);transition:color .2s,transform .2s}
+.socials a:hover,.socials a:focus-visible{color:var(--ink);transform:translateY(-2px)}
+.socials svg{width:calc(18px*var(--s));height:calc(18px*var(--s));fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 
 /* cinematography */
 .cine.on{display:flex}
@@ -56,6 +60,16 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
 .film .rt{white-space:nowrap}
 @media (hover:none){.film .info{opacity:1}}
 
+/* about */
+.about.on{display:flex}
+.about{overflow:auto;justify-content:flex-start;justify-content:safe center;align-items:center;padding:calc(90px*var(--s)) calc(28px*var(--s)) calc(60px*var(--s))}
+.about-in{width:min(calc(1000px*var(--s)),100%);display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:calc(48px*var(--s));align-items:start;margin:auto 0}
+.about-in img{display:block;width:100%;height:auto}
+.about h1{font:inherit;font-size:calc(20px*var(--s));font-weight:400;line-height:1;margin:0 0 calc(24px*var(--s))}
+.about p{margin:0 0 calc(16px*var(--s));max-width:64ch}
+.about .socials{margin-top:calc(28px*var(--s))}
+@media (max-width:720px){.about-in{grid-template-columns:1fr;gap:24px}}
+
 /* lightbox */
 #lb{position:fixed;inset:0;background:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:30;padding:60px 28px}
 #lb.open{display:flex}
@@ -64,19 +78,23 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
 #lb button{position:absolute;background:none;border:0;font:inherit;color:var(--mute);cursor:pointer;padding:10px}
 #lb button:hover{color:var(--ink)}
 #lb .x{top:max(18px,env(safe-area-inset-top));right:22px}#lb .p{left:18px;top:50%}#lb .n{right:18px;top:50%}
-@media (max-width:720px){:root{--s:1}header{padding:16px 18px}.note{left:18px}#lb .box{width:100%}}
+@media (max-width:720px){:root{--s:1}header{padding:16px 18px}.dock{left:18px}#lb .box{width:100%}}
 </style>
 </head>
 <body>
 <header>
   <a href="#photography">jesper seet</a>
-  <nav><a href="#photography" data-p="photography">photography</a><a href="#cinematography" data-p="cinematography">cinematography</a></nav>
+  <nav><a href="#photography" data-p="photography">photography</a><a href="#cinematography" data-p="cinematography">cinematography</a><a href="#about" data-p="about">about</a></nav>
 </header>
 
 <main>
   <section class="page" id="photography" aria-label="Photography">
     <div id="stagePh"><div id="ring"></div></div>
-    <div class="note">move the cursor to spin · click a photo to open</div>
+    <div class="dock"><div class="socials">
+      <a href="https://www.instagram.com/jespcr.png/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r=".7" fill="currentColor"/></svg></a>
+      <a href="https://www.youtube.com/@jespyfilms/" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="4"/><path d="M10 9.2v5.6l4.8-2.8z"/></svg></a>
+      <a href="https://letterboxd.com/jesparagus/" target="_blank" rel="noopener" aria-label="Letterboxd"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="3.7"/><circle cx="12" cy="12" r="3.7"/><circle cx="18" cy="12" r="3.7"/></svg></a>
+    </div></div>
   </section>
 
   <section class="page cine" id="cinematography" aria-label="Cinematography">
@@ -85,6 +103,29 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
       <span class="tri" aria-hidden="true"></span><span class="lab">reel</span>
     </button>
     <div class="films"><span>all films</span><div class="grid" id="films"></div></div>
+    <div class="socials">
+      <a href="https://www.instagram.com/jespcr.png/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r=".7" fill="currentColor"/></svg></a>
+      <a href="https://www.youtube.com/@jespyfilms/" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="4"/><path d="M10 9.2v5.6l4.8-2.8z"/></svg></a>
+      <a href="https://letterboxd.com/jesparagus/" target="_blank" rel="noopener" aria-label="Letterboxd"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="3.7"/><circle cx="12" cy="12" r="3.7"/><circle cx="18" cy="12" r="3.7"/></svg></a>
+    </div>
+  </section>
+
+  <section class="page about" id="about" aria-label="About">
+    <div class="about-in">
+      <img src="JesperProfile.jpg" alt="Portrait of jesper seet">
+      <div>
+        <h1>jesper seet</h1>
+        <p>I am an 18 year old photographer and cinematographer based out of Southern California and I have always loved photography and cinematography. On all the old videos my parents have of me on their camcorder, I can be seen reaching either for the camcorder itself or some other camera. Whether it’s a party or a road trip, wherever I go, my camera follows. Capturing the motion and emotion through still images is a passion that I am determined to hold on to until the end of my life with as much love as I had for it as a child.</p>
+        <p>In a way, this goal has influenced me. I strive to make photographs that feel timeless, that capture a child-like curiosity in the world. To document places and people and make them feel familiar, as though the viewer has already been to these places, already met these strangers on the street that are in some way shape or form beautiful or unique to me. Elderly people and children I find carry the most emotion, thought, or character but I look for stories in all sorts of people.</p>
+        <p>I react spontaneously when making images. I turn my camera and instinctually pull focus at a spot of light, a flash of color, hoping to create with the same energy a child would have, no matter the topic, no matter the theme.</p>
+        <p>I currently attend Chapman University, Class of 2030</p>
+        <div class="socials">
+      <a href="https://www.instagram.com/jespcr.png/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r=".7" fill="currentColor"/></svg></a>
+      <a href="https://www.youtube.com/@jespyfilms/" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="4"/><path d="M10 9.2v5.6l4.8-2.8z"/></svg></a>
+      <a href="https://letterboxd.com/jesparagus/" target="_blank" rel="noopener" aria-label="Letterboxd"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="3.7"/><circle cx="12" cy="12" r="3.7"/><circle cx="18" cy="12" r="3.7"/></svg></a>
+    </div>
+      </div>
+    </div>
   </section>
 </main>
 
@@ -150,7 +191,7 @@ function media(p,thumb,seed){
  return i;
 }
 
-function route(){var h=location.hash.slice(1)==="cinematography"?"cinematography":"photography";document.querySelectorAll(".page").forEach(function(s){s.classList.toggle("on",s.id===h)});document.querySelectorAll("nav a").forEach(function(a){a.toggleAttribute("aria-current",a.dataset.p===h);if(a.dataset.p===h)a.setAttribute("aria-current","page")});if(h!=="photography")closeLb()}addEventListener("hashchange",route);
+function route(){var h=location.hash.slice(1);h=(h==="cinematography"||h==="about")?h:"photography";document.querySelectorAll(".page").forEach(function(s){s.classList.toggle("on",s.id===h)});document.querySelectorAll("nav a").forEach(function(a){a.toggleAttribute("aria-current",a.dataset.p===h);if(a.dataset.p===h)a.setAttribute("aria-current","page")});if(h!=="photography")closeLb()}addEventListener("hashchange",route);
 
 var ring=document.getElementById("ring"),P=PHOTOS.length,N=36,slots=[],R=640,D=96,W=300,S=1.6;
 function size(){var m=innerWidth<720;S=m?1:Math.max(1,Math.min(1.6,innerWidth/900));document.documentElement.style.setProperty("--s",S);R=(m?380:640)*S;D=R*.15;W=m?170:Math.min(320,innerWidth/S*.23)*S;slots.forEach(function(o){var w=o.p.r>=1?W:W*o.p.r,h=o.p.r>=1?W/o.p.r:W;o.b.style.cssText="width:"+w+"px;height:"+h+"px;left:"+(-w/2)+"px;top:"+(-h/2)+"px"})}
