@@ -4,240 +4,58 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>jesper seet - creative portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
-:root{--s:1.6;--bg:#fff;--ink:#111;--mute:#8a8a8a;--line:#e4e4e4;color-scheme:light;
+:root{--bg:#fff;--ink:#111;--mute:#8a8a8a;--line:#e4e4e4;color-scheme:light;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *,*::before,*::after{box-sizing:inherit}
 html,body{height:100%;margin:0}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{background:var(--bg);color:var(--ink);font:400 calc(11.5px*var(--s))/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font:300 12px/1.6 "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow:hidden}
 a{color:inherit;text-decoration:none}
 :focus-visible{outline:1px solid var(--ink);outline-offset:3px}
-header{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;display:flex;justify-content:space-between;padding:calc(22px*var(--s)) calc(28px*var(--s));z-index:100;transform:translateZ(0)}
-nav a{margin-left:calc(22px*var(--s));color:var(--mute)}
+header{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;display:flex;justify-content:space-between;padding:22px 28px;z-index:100;transform:translateZ(0)}
+nav a{margin-left:22px;color:var(--mute)}
 nav a:hover,nav a[aria-current="page"]{color:var(--ink)}
 nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
 .page{display:none;position:absolute;inset:0}
 .page.on{display:block}
-
-/* curved gallery */
-#stagePh{position:absolute;inset:0;perspective:calc(900px*var(--s));perspective-origin:50% 50%;overflow:hidden;touch-action:pan-y}
+#stagePh{position:absolute;inset:0;isolation:isolate;z-index:0;perspective:900px;perspective-origin:50% 50%;overflow:hidden;touch-action:pan-y}
 #ring{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d}
 .slot{position:absolute;left:0;top:0;transform-style:preserve-3d;backface-visibility:hidden}
-.tile{position:absolute;display:block;padding:0;border:0;background:none;cursor:pointer;overflow:visible;font:inherit;
- transform:translateZ(0);transition:transform .45s cubic-bezier(.2,.7,.2,1)}
-.tile:hover,.tile:focus-visible{transform:translateZ(calc(70px*var(--s))) scale(1.06)}
-.tile img{display:block;width:100%;height:100%;object-fit:contain}
-.tile .ph{display:block;width:100%;height:100%}
+.tile{position:absolute;display:block;padding:0;border:0;background:none;cursor:pointer;transform:translateZ(0);transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.tile:hover,.tile:focus-visible{transform:translateZ(70px) scale(1.06)}
+.tile .ph,.tile img{display:block;width:100%;height:100%;object-fit:contain}
 .tile .cap{position:absolute;left:0;top:calc(100% + 8px);white-space:nowrap;color:var(--ink);opacity:0;transition:opacity .3s}
 .tile:hover .cap,.tile:focus-visible .cap{opacity:1}
-.dock{position:absolute;left:calc(28px*var(--s));bottom:calc(22px*var(--s) + env(safe-area-inset-bottom,0px));z-index:5}
-.socials{display:flex;align-items:center;gap:calc(18px*var(--s))}
-.socials a{display:block;line-height:0;color:var(--mute);transition:color .2s,transform .2s}
-.socials a:hover,.socials a:focus-visible{color:var(--ink);transform:translateY(-2px)}
-.socials svg{width:calc(18px*var(--s));height:calc(18px*var(--s));fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-
-/* cinematography */
-.cine.on{display:flex}
-.cine{flex-direction:column;justify-content:flex-start;justify-content:safe center;align-items:center;gap:calc(36px*var(--s));padding:calc(90px*var(--s)) calc(28px*var(--s)) calc(60px*var(--s));overflow:auto}
-.reel{position:relative;display:block;width:min(calc(900px*var(--s)),100%);aspect-ratio:16/9;background:#f4f4f4;border:1px solid var(--line);padding:0;color:inherit;cursor:pointer;font:inherit;text-align:left;overflow:hidden}
-.reel .thumb{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;pointer-events:none}
-.reel iframe{position:absolute;inset:0;display:block;width:100%;height:100%;border:0}
-.reel .tri{position:absolute;left:50%;top:50%;width:0;height:0;border-left:16px solid var(--ink);border-top:10px solid transparent;border-bottom:10px solid transparent;transform:translate(-35%,-50%);transition:transform .3s}
-.reel:hover .tri{transform:translate(-35%,-50%) scale(1.25)}
-.reel .lab{position:absolute;left:14px;bottom:10px}
-.films{width:min(calc(900px*var(--s)),100%);border-top:1px solid var(--line);padding-top:16px}
-
-.reel,.films{flex:none}
-.films>span{display:block;margin-bottom:calc(14px*var(--s))}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(calc(170px*var(--s)),1fr));gap:calc(12px*var(--s))}
-.film{position:relative;display:block;aspect-ratio:16/9;background:#f4f4f4;overflow:hidden}
-.film img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
-.film:hover img,.film:focus-visible img{transform:scale(1.05)}
-.film .info{position:absolute;left:0;right:0;bottom:0;padding:calc(24px*var(--s)) calc(10px*var(--s)) calc(8px*var(--s));background:linear-gradient(transparent,rgba(0,0,0,.78));color:#fff;opacity:0;transition:opacity .3s;display:flex;justify-content:space-between;gap:8px;line-height:1.3}
-.film:hover .info,.film:focus-visible .info{opacity:1}
-.film .rt{white-space:nowrap}
-@media (hover:none){.film .info{opacity:1}}
-
-/* about */
-.about.on{display:flex}
-.about{overflow:auto;justify-content:flex-start;justify-content:safe center;align-items:center;padding:calc(90px*var(--s)) calc(28px*var(--s)) calc(60px*var(--s))}
-.about-in{width:min(calc(1000px*var(--s)),100%);display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:calc(48px*var(--s));align-items:start;margin:auto 0}
-.about-in img{display:block;width:100%;height:auto}
-.pic{margin:0}
-.pic figcaption{margin-top:calc(8px*var(--s));color:var(--mute);font-size:calc(10px*var(--s))}
-.about h1{font:inherit;font-size:calc(18px*var(--s));font-weight:400;line-height:1;margin:0 0 calc(24px*var(--s))}
-.about p{margin:0 0 calc(16px*var(--s));max-width:64ch}
-.about .socials{margin-top:calc(28px*var(--s))}
-@media (max-width:720px){.about-in{grid-template-columns:1fr;gap:24px}}
-
-/* lightbox */
-#lb{position:fixed;inset:0;background:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:200;padding:60px 28px}
-#lb.open{display:flex}
-#lb .box{max-width:100%;max-height:78vh;width:min(70vw,900px);aspect-ratio:var(--r)}
-#lb .box>*{width:100%;height:100%;object-fit:contain;display:block}
-#lb button{position:absolute;background:none;border:0;font:inherit;color:var(--mute);cursor:pointer;padding:10px}
-#lb button:hover{color:var(--ink)}
-#lb .x{top:max(18px,env(safe-area-inset-top));right:22px}#lb .p{left:18px;top:50%}#lb .n{right:18px;top:50%}
-@media (max-width:720px){:root{--s:1}header{padding:16px 18px}.dock{left:18px}#lb .box{width:100%}}
+.note{position:absolute;left:28px;bottom:calc(22px + env(safe-area-inset-bottom,0px));color:var(--mute)}
+.cine.on{display:flex}.cine{flex-direction:column;justify-content:flex-start;justify-content:safe center;align-items:center;gap:36px;padding:90px 28px 60px;overflow:auto}
+.reel{position:relative;display:block;width:min(900px,100%);aspect-ratio:16/9;background:#f4f4f4;border:1px solid var(--line);padding:0;color:inherit;cursor:pointer;font:inherit;text-align:left;overflow:hidden}
+.reel .thumb{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;pointer-events:none}.reel iframe{position:absolute;inset:0;display:block;width:100%;height:100%;border:0}.reel .tri{position:absolute;left:50%;top:50%;width:0;height:0;border-left:16px solid var(--ink);border-top:10px solid transparent;border-bottom:10px solid transparent;transform:translate(-35%,-50%);transition:transform .3s}.reel:hover .tri{transform:translate(-35%,-50%) scale(1.25)}.reel .lab{position:absolute;left:14px;bottom:10px}.films{width:min(900px,100%);border-top:1px solid var(--line);padding-top:16px;flex:none}.films>span{display:block;margin-bottom:14px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}.film{position:relative;display:block;aspect-ratio:16/9;background:#f4f4f4;overflow:hidden}.film img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.2,.7,.2,1)}.film:hover img,.film:focus-visible img{transform:scale(1.05)}.film .info{position:absolute;left:0;right:0;bottom:0;padding:24px 10px 8px;background:linear-gradient(transparent,rgba(0,0,0,.78));color:#fff;opacity:0;transition:opacity .3s;display:flex;justify-content:space-between;gap:8px}.film:hover .info,.film:focus-visible .info{opacity:1}.film .rt{white-space:nowrap}@media (hover:none){.film .info{opacity:1}}
+#lb{position:fixed;inset:0;background:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:30;padding:60px 28px}#lb.open{display:flex}#lb .box{max-width:100%;max-height:78vh;width:min(70vw,900px);aspect-ratio:var(--r)}#lb .box>*{width:100%;height:100%;object-fit:contain;display:block}#lb button{position:absolute;background:none;border:0;font:inherit;color:var(--mute);cursor:pointer;padding:10px}#lb button:hover{color:var(--ink)}#lb .x{top:max(18px,env(safe-area-inset-top));right:22px}#lb .p{left:18px;top:50%}#lb .n{right:18px;top:50%}@media (max-width:720px){header{padding:16px 18px}.note{left:18px}#lb .box{width:100%}}
 </style>
 </head>
 <body>
-<header>
-  <a href="#photography">jesper seet</a>
-  <nav><a href="#photography" data-p="photography">photography</a><a href="#cinematography" data-p="cinematography">cinematography</a><a href="#about" data-p="about">about</a></nav>
-</header>
-
-<main>
-  <section class="page" id="photography" aria-label="Photography">
-    <div id="stagePh"><div id="ring"></div></div>
-    <div class="dock"><div class="socials">
-      <a href="https://www.instagram.com/jespcr.png/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r=".7" fill="currentColor"/></svg></a>
-      <a href="https://www.youtube.com/@jespyfilms/" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="4"/><path d="M10 9.2v5.6l4.8-2.8z"/></svg></a>
-      <a href="https://letterboxd.com/jesparagus/" target="_blank" rel="noopener" aria-label="Letterboxd"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="3.7"/><circle cx="12" cy="12" r="3.7"/><circle cx="18" cy="12" r="3.7"/></svg></a>
-    </div></div>
-  </section>
-
-  <section class="page cine" id="cinematography" aria-label="Cinematography">
-    <button class="reel" id="reelLink" type="button" aria-label="Play the reel">
-      <img class="thumb" src="https://img.youtube.com/vi/bMZotERnYkQ/hqdefault.jpg" alt="" aria-hidden="true">
-      <span class="tri" aria-hidden="true"></span><span class="lab">reel</span>
-    </button>
-    <div class="films"><span>all films</span><div class="grid" id="films"></div></div>
-    <div class="socials">
-      <a href="https://www.instagram.com/jespcr.png/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r=".7" fill="currentColor"/></svg></a>
-      <a href="https://www.youtube.com/@jespyfilms/" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="4"/><path d="M10 9.2v5.6l4.8-2.8z"/></svg></a>
-      <a href="https://letterboxd.com/jesparagus/" target="_blank" rel="noopener" aria-label="Letterboxd"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="3.7"/><circle cx="12" cy="12" r="3.7"/><circle cx="18" cy="12" r="3.7"/></svg></a>
-    </div>
-  </section>
-
-  <section class="page about" id="about" aria-label="About">
-    <div class="about-in">
-      <figure class="pic"><img src="JesperProfile.jpg" alt="Portrait of jesper seet"><figcaption>photo by elsie kim</figcaption></figure>
-      <div>
-        <h1>Who Am I?</h1>
-        <p>I am an 18 year old photographer and cinematographer based out of Southern California and I have always loved photography and cinematography. On all the old videos my parents have of me on their camcorder, I can be seen reaching either for the camcorder itself or some other camera. Whether it’s a party or a road trip, wherever I go, my camera follows. Capturing the motion and emotion through still images is a passion that I am determined to hold on to until the end of my life with as much love as I had for it as a child.</p>
-        <p>In a way, this goal has influenced me. I strive to make photographs that feel timeless, that capture a child-like curiosity in the world. To document places and people and make them feel familiar, as though the viewer has already been to these places, already met these strangers on the street that are in some way shape or form beautiful or unique to me. Elderly people and children I find carry the most emotion, thought, or character but I look for stories in all sorts of people.</p>
-        <p>I react spontaneously when making images. I turn my camera and instinctually pull focus at a spot of light, a flash of color, hoping to create with the same energy a child would have, no matter the topic, no matter the theme.</p>
-        <p>I currently attend Chapman University, Dodge College Class of 2030 for Film Production with an emphasis in Cinematography.</p>
-        <div class="socials">
-      <a href="https://www.instagram.com/jespcr.png/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r=".7" fill="currentColor"/></svg></a>
-      <a href="https://www.youtube.com/@jespyfilms/" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="4"/><path d="M10 9.2v5.6l4.8-2.8z"/></svg></a>
-      <a href="https://letterboxd.com/jesparagus/" target="_blank" rel="noopener" aria-label="Letterboxd"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="3.7"/><circle cx="12" cy="12" r="3.7"/><circle cx="18" cy="12" r="3.7"/></svg></a>
-    </div>
-      </div>
-    </div>
-  </section>
-</main>
-
-<div id="lb" role="dialog" aria-modal="true" aria-label="Photo viewer">
-  <button class="x" aria-label="Close">close</button>
-  <button class="p" aria-label="Previous photo">prev</button>
-  <button class="n" aria-label="Next photo">next</button>
-  <div class="box" id="box"></div><div id="cap"></div>
-</div>
-
+<header><a href="#photography">jesper seet</a><nav><a href="#photography" data-p="photography">photography</a><a href="#cinematography" data-p="cinematography">cinematography</a></nav></header>
+<main><section class="page" id="photography" aria-label="Photography"><div id="stagePh"><div id="ring"></div></div><div class="note">move the cursor to spin · click a photo to open</div></section><section class="page cine" id="cinematography" aria-label="Cinematography"><button class="reel" id="reelLink" type="button" aria-label="Play the reel"><img class="thumb" src="https://img.youtube.com/vi/bMZotERnYkQ/hqdefault.jpg" alt="" aria-hidden="true"><span class="tri" aria-hidden="true"></span><span class="lab">reel</span></button><div class="films"><span>films</span><div class="grid" id="films"></div></div></section></main>
+<div id="lb" role="dialog" aria-modal="true" aria-label="Photo viewer"><button class="x" aria-label="Close">close</button><button class="p" aria-label="Previous photo">prev</button><button class="n" aria-label="Next photo">next</button><div class="box" id="box"></div><div id="cap"></div></div>
 <script>
-/* ===== EDIT THESE ===== */
 var REEL_URL="https://youtu.be/bMZotERnYkQ";
-var FILMS_URL="#";
-/* Films: thumbnails come from YouTube; runtimes fill in automatically. Add runtime:"4:12" to an entry to set it yourself. */
-var FILMS=[
- {id:"q6GLVGwi1qI",title:"baby blue hullabaloo (2026)"},
- {id:"cigl2eV8Z-s",title:"dustbowl (2025)"},
- {id:"pBcS-4kiMvM",title:"dead weight (2025)"},
- {id:"Onw108cnFNs",title:"monkey business (2025)"},
- {id:"_ZccQKu-kQ4",title:"prohohoibition (2023)"}
-];
+var FILMS=[{id:"q6GLVGwi1qI",title:"baby blue hullabaloo (2026)"},{id:"cigl2eV8Z-s",title:"dustbowl (2025)"},{id:"pBcS-4kiMvM",title:"dead weight (2025)"},{id:"Onw108cnFNs",title:"monkey business (2025)"},{id:"_ZccQKu-kQ4",title:"prohohoibition (2023)"}];
 var PHOTOS=[
- {t:"Camp",r:1.5,src:"Camp.jpg",thumb:"thumbnails/Camp (Thumb).jpg"},
- {t:"Chicken Sprint",r:1.5,src:"Chicken Sprint.jpg",thumb:"thumbnails/Chicken Sprint (Thumb).jpg"},
- {t:"Chicken Vendor",r:1.5,src:"Chicken Vendor.jpg",thumb:"thumbnails/Chicken Vendor (Thumb).jpg"},
- {t:"Fabric",r:1.5,src:"Fabric.jpg",thumb:"thumbnails/Fabric (Thumb).jpg"},
- {t:"Future Gaze",r:1.5,src:"Future Gaze.jpg",thumb:"thumbnails/Future Gaze (Thumb).jpg"},
- {t:"Girl Feeds Pigeons",r:1.5,src:"Girl Feeds Pigeons.jpg",thumb:"thumbnails/Girl Feeds Pigeons (Thumb).jpg"},
- {t:"Japan Crosswalk",r:1.5,src:"Japan Crosswalk.jpg",thumb:"thumbnails/Japan Crosswalk (Thumb).jpg"},
- {t:"Kian Heng Jade and Jewellery",r:1.5,src:"Kian Heng Jade and Jewellery.jpg",thumb:"thumbnails/Kian Heng Jade and Jewellery (Thumb).jpg"},
- {t:"Malaysian Farmers",r:1.5,src:"Malaysian Farmers.jpg",thumb:"thumbnails/Malaysian Farmers (Thumb).jpg"},
- {t:"Mantis",r:1.5,src:"Mantis.jpg",thumb:"thumbnails/Mantis (Thumb).jpg"},
- {t:"Mother and Son",r:1.5,src:"Mother and Son.jpg",thumb:"thumbnails/Mother and Son (Thumb).jpg"},
- {t:"National Youth Leadership Training Camp",r:1.5,src:"National Youth Leadership Training Camp.jpg",thumb:"thumbnails/National Youth Leadership Training Camp (Thumb).jpg"},
- {t:"Punk Rockin",r:1.5,src:"Punk Rockin.jpg",thumb:"thumbnails/Punk Rockin (Thumb).jpg"},
- {t:"Rest",r:1.5,src:"Rest.jpg",thumb:"thumbnails/Rest (Thumb).jpg"},
- {t:"Smoke Break",r:1.5,src:"Smoke Break.jpg",thumb:"thumbnails/Smoke Break (Thumb).jpg"},
- {t:"Street Vendor in Malaysia",r:1.5,src:"Street Vendor in Malaysia.jpg",thumb:"thumbnails/Street Vendor in Malaysia (Thumb).jpg"},
- {t:"Sunrise on the Colorado River",r:1.5,src:"Sunrise on the Colorado River.jpg",thumb:"thumbnails/Sunrise on the Colorado River (Thumb).jpg"},
- {t:"Sunset Hike",r:1.5,src:"Sunset Hike.jpg",thumb:"thumbnails/Sunset Hike (Thumb).jpg"},
- {t:"The Kids are Gonna Be Ok 1",r:1.5,src:"The Kids are Gonna Be Ok 1.jpg",thumb:"thumbnails/The Kids are Gonna Be Ok 1 (Thumb).jpg"},
- {t:"The Kids are Gonna Be Ok 2",r:1.5,src:"The Kids are Gonna Be Ok 2.jpg",thumb:"thumbnails/The Kids are Gonna Be Ok 2 (Thumb).jpg"},
- {t:"The Kids are Gonna Be Ok 3",r:1.5,src:"The Kids are Gonna Be Ok 3.jpg",thumb:"thumbnails/The Kids are Gonna Be Ok 3 (Thumb).jpg"},
- {t:"The Kids are Gonna Be Ok 4",r:1.5,src:"The Kids are Gonna Be Ok 4.jpg",thumb:"thumbnails/The Kids are Gonna Be Ok 4 (Thumb).jpg"},
- {t:"Untitled",r:1.5,src:"Untitled.jpg",thumb:"thumbnails/Untitled (Thumb).jpg"},
- {t:"Untitled",r:1.5,src:"Untitled (2).jpg",thumb:"thumbnails/Untitled (2) (Thumb).jpg"},
- {t:"Untitled",r:1.5,src:"Untitled (3).jpg",thumb:"thumbnails/Untitled (3) (Thumb).jpg"},
- {t:"Untitled",r:1.5,src:"Untitled (4).jpg",thumb:"thumbnails/Untitled (4) (Thumb).jpg"},
- {t:"Untitled",r:1.5,src:"Untitled (5).jpg",thumb:"thumbnails/Untitled (5) (Thumb).jpg"},
- {t:"Untitled",r:1.5,src:"Untitled (6).jpg",thumb:"thumbnails/Untitled (6) (Thumb).jpg"},
- {t:"Untitled",r:1.5,src:"Untitled (7).jpg",thumb:"thumbnails/Untitled (7) (Thumb).jpg"},
- {t:"Untitled",r:1.5,src:"Untitled (8).jpg",thumb:"thumbnails/Untitled (8) (Thumb).jpg"}
+{t:"Camp",r:1.5,src:"Camp.jpg",thumb:"thumbnails/Camp (Thumb).jpg"},{t:"Chicken Sprint",r:1.5,src:"Chicken Sprint.jpg",thumb:"thumbnails/Chicken Sprint (Thumb).jpg"},{t:"Chicken Vendor",r:1.5,src:"Chicken Vendor.jpg",thumb:"thumbnails/Chicken Vendor (Thumb).jpg"},{t:"Fabric",r:1.5,src:"Fabric.jpg",thumb:"thumbnails/Fabric (Thumb).jpg"},{t:"Future Gaze",r:1.5,src:"Future Gaze.jpg",thumb:"thumbnails/Future Gaze (Thumb).jpg"},{t:"Girl Feeds Pigeons",r:1.5,src:"Girl Feeds Pigeons.jpg",thumb:"thumbnails/Girl Feeds Pigeons (Thumb).jpg"},{t:"Japan Crosswalk",r:1.5,src:"Japan Crosswalk.jpg",thumb:"thumbnails/Japan Crosswalk (Thumb).jpg"},{t:"Kian Heng Jade and Jewellery",r:1.5,src:"Kian Heng Jade and Jewellery.jpg",thumb:"thumbnails/Kian Heng Jade and Jewellery (Thumb).jpg"},{t:"Malaysian Farmers",r:1.5,src:"Malaysian Farmers.jpg",thumb:"thumbnails/Malaysian Farmers (Thumb).jpg"},{t:"Mantis",r:1.5,src:"Mantis.jpg",thumb:"thumbnails/Mantis (Thumb).jpg"},{t:"Mother and Son",r:1.5,src:"Mother and Son.jpg",thumb:"thumbnails/Mother and Son (Thumb).jpg"},{t:"National Youth Leadership Training Camp",r:1.5,src:"National Youth Leadership Training Camp.jpg",thumb:"thumbnails/National Youth Leadership Training Camp (Thumb).jpg"},{t:"Punk Rockin",r:1.5,src:"Punk Rockin.jpg",thumb:"thumbnails/Punk Rockin (Thumb).jpg"},{t:"Rest",r:1.5,src:"Rest.jpg",thumb:"thumbnails/Rest (Thumb).jpg"},{t:"Smoke Break",r:1.5,src:"Smoke Break.jpg",thumb:"thumbnails/Smoke Break (Thumb).jpg"},{t:"Street Vendor in Malaysia",r:1.5,src:"Street Vendor in Malaysia.jpg",thumb:"thumbnails/Street Vendor in Malaysia (Thumb).jpg"},{t:"Sunrise on the Colorado River",r:1.5,src:"Sunrise on the Colorado River.jpg",thumb:"thumbnails/Sunrise on the Colorado River (Thumb).jpg"},{t:"Sunset Hike",r:1.5,src:"Sunset Hike.jpg",thumb:"thumbnails/Sunset Hike (Thumb).jpg"},{t:"The Kids are Gonna Be Ok 1",r:1.5,src:"The Kids are Gonna Be Ok 1.jpg",thumb:"thumbnails/The Kids are Gonna Be Ok 1 (Thumb).jpg"},{t:"The Kids are Gonna Be Ok 2",r:1.5,src:"The Kids are Gonna Be Ok 2.jpg",thumb:"thumbnails/The Kids are Gonna Be Ok 2 (Thumb).jpg"},{t:"The Kids are Gonna Be Ok 3",r:1.5,src:"The Kids are Gonna Be Ok 3.jpg",thumb:"thumbnails/The Kids are Gonna Be Ok 3 (Thumb).jpg"},{t:"The Kids are Gonna Be Ok 4",r:1.5,src:"The Kids are Gonna Be Ok 4.jpg",thumb:"thumbnails/The Kids are Gonna Be Ok 4 (Thumb).jpg"},{t:"Untitled",r:1.5,src:"Untitled.jpg",thumb:"thumbnails/Untitled (Thumb).jpg"},{t:"Untitled",r:1.5,src:"Untitled (2).jpg",thumb:"thumbnails/Untitled (2) (Thumb).jpg"},{t:"Untitled",r:1.5,src:"Untitled (3).jpg",thumb:"thumbnails/Untitled (3) (Thumb).jpg"},{t:"Untitled",r:1.5,src:"Untitled (4).jpg",thumb:"thumbnails/Untitled (4) (Thumb).jpg"},{t:"Untitled",r:1.5,src:"Untitled (5).jpg",thumb:"thumbnails/Untitled (5) (Thumb).jpg"},{t:"Untitled",r:1.5,src:"Untitled (6).jpg",thumb:"thumbnails/Untitled (6) (Thumb).jpg"},{t:"Untitled",r:1.5,src:"Untitled (7).jpg",thumb:"thumbnails/Untitled (7) (Thumb).jpg"},{t:"Untitled",r:1.5,src:"Untitled (8).jpg",thumb:"thumbnails/Untitled (8) (Thumb).jpg"},
+{t:"Alex",r:1.5,src:"Alex.jpg",thumb:"thumbnails/Alex (Thumb).jpg"},{t:"Bella 1",r:1.5,src:"Bella 1.jpg",thumb:"thumbnails/Bella 1 (Thumb).jpg"},{t:"Bella 2",r:1.5,src:"Bella 2.jpg",thumb:"thumbnails/Bella 2 (Thumb).jpg"},{t:"Bella 3",r:1.5,src:"Bella 3.jpg",thumb:"thumbnails/Bella 3 (Thumb).jpg"},{t:"Chloelux",r:1.5,src:"Chloelux.jpg",thumb:"thumbnails/Chloelux (Thumb).jpg"},{t:"Chloelux 2",r:1.5,src:"Chloelux 2.jpg",thumb:"thumbnails/Chloelux 2 (Thumb).jpg"},{t:"Dan 1",r:1.5,src:"Dan 1.jpg",thumb:"thumbnails/Dan 1 (Thumb).jpg"},{t:"Dan 2",r:1.5,src:"Dan 2.jpg",thumb:"thumbnails/Dan 2 (Thumb).jpg"},{t:"Dan 3",r:1.5,src:"Dan 3.jpg",thumb:"thumbnails/Dan 3 (Thumb).jpg"},{t:"Heights Abandoned",r:1.5,src:"Heights Abandoned.jpg",thumb:"thumbnails/Heights Abandoned (Thumb).jpg"},{t:"Maddie",r:1.5,src:"Maddie.jpg",thumb:"thumbnails/Maddie (Thumb).jpg"},{t:"Ramzi 1",r:1.5,src:"Ramzi 1.jpg",thumb:"thumbnails/Ramzi 1 (Thumb).jpg"},{t:"Ramzi 2",r:1.5,src:"Ramzi 2.jpg",thumb:"thumbnails/Ramzi 2 (Thumb).jpg"},{t:"Rebirthing",r:1.5,src:"Rebirthing.jpg",thumb:"thumbnails/Rebirthing (Thumb).jpg"},{t:"Roaming",r:1.5,src:"Roaming.jpg",thumb:"thumbnails/Roaming (Thumb).jpg"},{t:"Wonder and Suspicion",r:1.5,src:"Wonder and Suspicion.jpg",thumb:"thumbnails/Wonder and Suspicion (Thumb).jpg"}
 ];
-/* ====================== */
-var reelLink=document.getElementById("reelLink");
-reelLink.addEventListener("click",function(){var f=document.createElement("iframe");f.src="https://www.youtube-nocookie.com/embed/bMZotERnYkQ?autoplay=1";f.title="Jesper's cinematography reel";f.allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";f.allowFullscreen=true;reelLink.replaceChildren(f)});
+var reelLink=document.getElementById("reelLink");reelLink.addEventListener("click",function(){var f=document.createElement("iframe");f.src="https://www.youtube-nocookie.com/embed/bMZotERnYkQ?autoplay=1";f.title="Jesper's cinematography reel";f.allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";f.allowFullscreen=true;reelLink.replaceChildren(f)});
 var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-function media(p,thumb,seed){
- var i=document.createElement("img");i.src=encodeURI(thumb||p.src);i.alt=p.t;i.loading=thumb?"lazy":"eager";i.decoding="async";
- i.onload=function(){var w=i.naturalWidth,h=i.naturalHeight;if(w&&h){p.r=w/h;if(thumb){size()}else if(typeof box!=="undefined"){lb.style.setProperty("--r",p.r);box.style.setProperty("--r",p.r)}}};
- return i;
-}
-
-function route(){var h=location.hash.slice(1);h=(h==="cinematography"||h==="about")?h:"photography";document.querySelectorAll(".page").forEach(function(s){s.classList.toggle("on",s.id===h)});document.querySelectorAll("nav a").forEach(function(a){a.toggleAttribute("aria-current",a.dataset.p===h);if(a.dataset.p===h)a.setAttribute("aria-current","page")});if(h!=="photography")closeLb()}addEventListener("hashchange",route);
-
-var ring=document.getElementById("ring"),P=PHOTOS.length,N=36,slots=[],R=640,D=96,W=300,S=1.6;
-function size(){var m=innerWidth<720;S=m?1:Math.max(1,Math.min(1.6,innerWidth/900));document.documentElement.style.setProperty("--s",S);W=m?170:Math.min(320,innerWidth/S*.23)*S;R=m?380:W/.43;D=R*.15;slots.forEach(function(o){var w=o.p.r>=1?W:W*o.p.r,h=o.p.r>=1?W/o.p.r:W;o.b.style.cssText="width:"+w+"px;height:"+h+"px;left:"+(-w/2)+"px;top:"+(-h/2)+"px"})}
-var GA=Math.PI*(3-Math.sqrt(5));
-for(var i=0;i<N;i++)(function(i){var p=PHOTOS[i%P],lat=Math.asin((1-2*(i+.5)/N)*.88),lon=i*GA;var s=document.createElement("div");s.className="slot";var b=document.createElement("button");b.className="tile";b.type="button";b.setAttribute("aria-label","Open "+p.t);b.appendChild(media(p,p.thumb,i));var c=document.createElement("span");c.className="cap";c.textContent=p.t;b.appendChild(c);b.addEventListener("click",function(){openLb(i%P)});s.appendChild(b);ring.appendChild(s);slots.push({s:s,b:b,p:p,i:i,lat:lat,lon:lon,x:-Math.cos(lat)*Math.sin(lon),y:Math.sin(lat),z:-Math.cos(lat)*Math.cos(lon)})})(i);
-size();addEventListener("resize",size);
-
-var ry=0,rx=0,vx=0,vy=0,mx=.5,my=.5,active=false,t0=performance.now();var stage=document.getElementById("stagePh");addEventListener("pointermove",function(e){mx=e.clientX/innerWidth;my=e.clientY/innerHeight;active=true});document.documentElement.addEventListener("pointerleave",function(){active=false});
-function frame(now){var t=(now-t0)/1000;if(document.getElementById("photography").classList.contains("on")){var dx=Math.abs(mx-.5)<.06?0:mx-.5,dy=Math.abs(my-.5)<.06?0:my-.5;var tvx=reduce?0:(active?dx*.035:.0007),tvy=reduce?0:(active?-dy*.022:0);vx+=(tvx-vx)*.05;vy+=(tvy-vy)*.05;ry+=vx;rx=Math.max(-.9,Math.min(.9,rx+vy));ring.style.transform="translateZ("+D+"px) rotateX("+rx+"rad) rotateY("+ry+"rad)";var cy=Math.cos(ry),sy=Math.sin(ry),cx=Math.cos(rx),sx=Math.sin(rx);slots.forEach(function(o){var z1=-o.x*sy+o.z*cy,z2=o.y*sx+z1*cx,zt=D+R*z2,op=Math.max(0,Math.min(1,(-zt-40*S)/(260*S))),fy=reduce?0:Math.sin(t*.7+o.i*1.9)*8*S;o.s.style.transform="rotateY("+o.lon+"rad) rotateX("+o.lat+"rad) translateZ("+(-R)+"px) translateY("+fy+"px)";o.s.style.opacity=op.toFixed(2);o.s.style.visibility=op>.02?"visible":"hidden";o.s.style.pointerEvents=op>.5?"auto":"none"})}requestAnimationFrame(frame)}requestAnimationFrame(frame);
-
-var lb=document.getElementById("lb"),box=document.getElementById("box"),cap=document.getElementById("cap"),cur=0,last=null;
-function show(i){cur=(i+P)%P;var p=PHOTOS[cur];lb.style.setProperty("--r",p.r);box.style.setProperty("--r",p.r);box.replaceChildren(media(p,false));cap.textContent=p.t}
-function openLb(i){last=document.activeElement;show(i);lb.classList.add("open");lb.querySelector(".x").focus()}function closeLb(){if(!lb.classList.contains("open"))return;lb.classList.remove("open");if(last&&last.focus)last.focus()}
-lb.querySelector(".x").onclick=closeLb;lb.querySelector(".p").onclick=function(){show(cur-1)};lb.querySelector(".n").onclick=function(){show(cur+1)};lb.addEventListener("click",function(e){if(e.target===lb)closeLb()});addEventListener("keydown",function(e){if(!lb.classList.contains("open"))return;if(e.key==="Escape")closeLb();if(e.key==="ArrowLeft")show(cur-1);if(e.key==="ArrowRight")show(cur+1)});
-try{
-function fmt(sec){sec=Math.round(sec);var h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),r=sec%60,p=function(n){return ("0"+n).slice(-2)};return h?h+":"+p(m)+":"+p(r):m+":"+p(r)}
-var filmsEl=document.getElementById("films");
-FILMS.forEach(function(f){
-  var a=document.createElement("a");a.className="film";a.href="https://youtu.be/"+f.id;a.target="_blank";a.rel="noopener";
-  a.setAttribute("aria-label",(f.title||"Film")+" - watch on YouTube");
-  var im=document.createElement("img");im.src="https://img.youtube.com/vi/"+f.id+"/hqdefault.jpg";im.alt="";im.loading="lazy";
-  var info=document.createElement("span");info.className="info";
-  var ti=document.createElement("span");ti.textContent=f.title||"";
-  var rt=document.createElement("span");rt.className="rt";rt.textContent=f.runtime||"";
-  info.appendChild(ti);info.appendChild(rt);a.appendChild(im);a.appendChild(info);filmsEl.appendChild(a);f.rt=rt;
-});
-function loadRuntimes(){
-  var need=FILMS.filter(function(f){return !f.runtime});if(!need.length)return;
-  function go(){
-    var host=document.createElement("div");host.setAttribute("aria-hidden","true");
-    host.style.cssText="position:absolute;width:1px;height:1px;left:-9999px;overflow:hidden";document.body.appendChild(host);
-    need.forEach(function(f){
-      var el=document.createElement("div");host.appendChild(el);
-      new YT.Player(el,{width:"1",height:"1",videoId:f.id,playerVars:{controls:0,playsinline:1},events:{onReady:function(e){
-        var n=0,iv=setInterval(function(){var d=e.target.getDuration();n++;
-          if(d>0){clearInterval(iv);f.rt.textContent=fmt(d);e.target.destroy()}
-          else if(n>25){clearInterval(iv);e.target.destroy()}},400)}}});
-    });
-  }
-  if(window.YT&&YT.Player)go();
-  else{window.onYouTubeIframeAPIReady=go;var sc=document.createElement("script");sc.src="https://www.youtube.com/iframe_api";document.head.appendChild(sc)}
-}
-loadRuntimes();
-}catch(err){}
-route();
+function media(p,lg,seed){if(p.src){var i=document.createElement("img");i.src=lg?encodeURI(p.src):encodeURI(p.thumb||p.src);i.alt=p.t;i.loading=lg?"eager":"lazy";i.decoding="async";i.onload=function(){if(lg&&i.naturalWidth&&i.naturalHeight)p.r=i.naturalWidth/i.naturalHeight};return i}var d=document.createElement("div");d.className="ph";d.setAttribute("role","img");d.setAttribute("aria-label",p.t+" (placeholder)");var h=((seed==null?p.t.length:seed)*37)%360;d.style.background="linear-gradient(170deg,hsl("+h+" 22% 80%) 0%,hsl("+((h+30)%360)+" 26% 62%) 55%,hsl("+((h+60)%360)+" 22% 36%) 100%)";return d}
+function route(){var h=location.hash.slice(1)==="cinematography"?"cinematography":"photography";document.querySelectorAll(".page").forEach(function(s){s.classList.toggle("on",s.id===h)});document.querySelectorAll("nav a").forEach(function(a){a.toggleAttribute("aria-current",a.dataset.p===h);if(a.dataset.p===h)a.setAttribute("aria-current","page")});if(h!=="photography")closeLb()}addEventListener("hashchange",route);addEventListener("popstate",route);document.querySelectorAll("header a").forEach(function(a){a.addEventListener("click",function(e){var h=a.getAttribute("href");if(!h||h.charAt(0)!=="#")return;e.preventDefault();if(location.hash!==h){try{history.pushState(null,"",h)}catch(x){location.hash=h}}route()})});
+var ring=document.getElementById("ring"),P=PHOTOS.length,N=36,slots=[],R=640,D=96,W=300;
+function size(){var m=innerWidth<720;R=m?380:640;D=R*.15;W=m?170:Math.min(320,innerWidth*.23);slots.forEach(function(o){var w=o.p.r<1?W*.72:W,h=w/o.p.r;o.b.style.cssText="width:"+w+"px;height:"+h+"px;left:"+(-w/2)+"px;top:"+(-h/2)+"px"})}
+var GA=Math.PI*(3-Math.sqrt(5));for(var i=0;i<N;i++)(function(i){var p=PHOTOS[i%P],lat=Math.asin((1-2*(i+.5)/N)*.88),lon=i*GA;var s=document.createElement("div");s.className="slot";var b=document.createElement("button");b.className="tile";b.type="button";b.setAttribute("aria-label","Open "+p.t);b.appendChild(media(p,false,i));var c=document.createElement("span");c.className="cap";c.textContent=p.t;b.appendChild(c);b.addEventListener("click",function(){openLb(i%P)});s.appendChild(b);ring.appendChild(s);slots.push({s:s,b:b,p:p,i:i,lat:lat,lon:lon,x:-Math.cos(lat)*Math.sin(lon),y:Math.sin(lat),z:-Math.cos(lat)*Math.cos(lon)})})(i);size();addEventListener("resize",size);
+var ry=0,rx=0,vx=0,vy=0,mx=.5,my=.5,active=false,t0=performance.now();var stage=document.getElementById("stagePh");stage.addEventListener("pointermove",function(e){var r=stage.getBoundingClientRect();mx=(e.clientX-r.left)/r.width;my=(e.clientY-r.top)/r.height;active=true});stage.addEventListener("pointerleave",function(){active=false});function frame(now){var t=(now-t0)/1000;if(document.getElementById("photography").classList.contains("on")){var dx=Math.abs(mx-.5)<.06?0:mx-.5,dy=Math.abs(my-.5)<.06?0:my-.5;var tvx=reduce?0:(active?dx*.035:.0007),tvy=reduce?0:(active?-dy*.022:0);vx+=(tvx-vx)*.05;vy+=(tvy-vy)*.05;ry+=vx;rx=Math.max(-.9,Math.min(.9,rx+vy));ring.style.transform="translateZ("+D+"px) rotateX("+rx+"rad) rotateY("+ry+"rad)";var cy=Math.cos(ry),sy=Math.sin(ry),cx=Math.cos(rx),sx=Math.sin(rx);slots.forEach(function(o){var z1=-o.x*sy+o.z*cy,z2=o.y*sx+z1*cx,zt=D+R*z2,op=Math.max(0,Math.min(1,(-zt-40)/260)),fy=reduce?0:Math.sin(t*.7+o.i*1.9)*8;o.s.style.transform="rotateY("+o.lon+"rad) rotateX("+o.lat+"rad) translateZ("+(-R)+"px) translateY("+fy+"px)";o.s.style.opacity=op.toFixed(2);o.s.style.visibility=op>.02?"visible":"hidden";o.s.style.pointerEvents=op>.5?"auto":"none"})}requestAnimationFrame(frame)}requestAnimationFrame(frame);
+var lb=document.getElementById("lb"),box=document.getElementById("box"),cap=document.getElementById("cap"),cur=0,last=null;function show(i){cur=(i+P)%P;var p=PHOTOS[cur];lb.style.setProperty("--r",p.r);box.style.setProperty("--r",p.r);box.replaceChildren(media(p,true));cap.textContent=p.t}function openLb(i){last=document.activeElement;show(i);lb.classList.add("open");lb.querySelector(".x").focus()}function closeLb(){if(!lb.classList.contains("open"))return;lb.classList.remove("open");if(last&&last.focus)last.focus()}lb.querySelector(".x").onclick=closeLb;lb.querySelector(".p").onclick=function(){show(cur-1)};lb.querySelector(".n").onclick=function(){show(cur+1)};lb.addEventListener("click",function(e){if(e.target===lb)closeLb()});addEventListener("keydown",function(e){if(!lb.classList.contains("open"))return;if(e.key==="Escape")closeLb();if(e.key==="ArrowLeft")show(cur-1);if(e.key==="ArrowRight")show(cur+1)});
+try{var filmsEl=document.getElementById("films");function fmt(sec){sec=Math.round(sec);var h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),r=sec%60,p=function(n){return("0"+n).slice(-2)};return h?h+":"+p(m)+":"+p(r):m+":"+p(r)}FILMS.forEach(function(f){var a=document.createElement("a");a.className="film";a.href="https://youtu.be/"+f.id;a.target="_blank";a.rel="noopener";a.setAttribute("aria-label",(f.title||"Film")+" — watch on YouTube");var im=document.createElement("img");im.src="https://img.youtube.com/vi/"+f.id+"/hqdefault.jpg";im.alt="";im.loading="lazy";var info=document.createElement("span");info.className="info";var ti=document.createElement("span");ti.textContent=f.title||"";var rt=document.createElement("span");rt.className="rt";rt.textContent=f.runtime||"";info.appendChild(ti);info.appendChild(rt);a.appendChild(im);a.appendChild(info);filmsEl.appendChild(a);f.rt=rt;if(!f.title&&window.fetch){fetch("https://www.youtube.com/oembed?format=json&url="+encodeURIComponent("https://youtu.be/"+f.id)).then(function(r){return r.json()}).then(function(d){ti.textContent=d.title;a.setAttribute("aria-label",d.title+" — watch on YouTube")}).catch(function(){})}});function loadRuntimes(){var need=FILMS.filter(function(f){return !f.runtime});if(!need.length)return;function go(){var host=document.createElement("div");host.setAttribute("aria-hidden","true");host.style.cssText="position:absolute;width:1px;height:1px;left:-9999px;overflow:hidden";document.body.appendChild(host);need.forEach(function(f){var el=document.createElement("div");host.appendChild(el);new YT.Player(el,{width:"1",height:"1",videoId:f.id,playerVars:{controls:0,playsinline:1},events:{onReady:function(e){var n=0,iv=setInterval(function(){var d=e.target.getDuration();n++;if(d>0){clearInterval(iv);f.rt.textContent=fmt(d);e.target.destroy()}else if(n>25){clearInterval(iv);e.target.destroy()}},400)}}})})}if(window.YT&&YT.Player)go();else{window.onYouTubeIframeAPIReady=go;var sc=document.createElement("script");sc.src="https://www.youtube.com/iframe_api";document.head.appendChild(sc)}}loadRuntimes()}catch(err){}route();
 </script>
 </body>
 </html>
