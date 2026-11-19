@@ -21,8 +21,8 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
 .page.on{display:block}
 
 /* curved gallery */
-#stagePh,#cstage{position:absolute;inset:0;perspective:calc(900px*var(--s));perspective-origin:50% 50%;overflow:hidden;touch-action:pan-y}
-#ring,#cring{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d}
+#stagePh{position:absolute;inset:0;perspective:calc(900px*var(--s));perspective-origin:50% 50%;overflow:hidden;touch-action:pan-y}
+#ring{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d}
 .slot{position:absolute;left:0;top:0;transform-style:preserve-3d;backface-visibility:hidden}
 .tile{position:absolute;display:block;padding:0;border:0;background:none;cursor:pointer;overflow:visible;font:inherit;
  transform:translateZ(0);transition:transform .45s cubic-bezier(.2,.7,.2,1)}
@@ -40,7 +40,7 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
 /* cinematography */
 .cine.on{display:flex}
 .cine{flex-direction:column;justify-content:flex-start;justify-content:safe center;align-items:center;gap:calc(36px*var(--s));padding:calc(90px*var(--s)) calc(28px*var(--s)) calc(60px*var(--s));overflow:auto}
-.reel{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:1;box-shadow:0 24px 60px -28px rgba(0,0,0,.45);display:block;width:min(calc(560px*var(--s)),88vw);aspect-ratio:16/9;background:#f4f4f4;border:1px solid var(--line);padding:0;color:inherit;cursor:pointer;font:inherit;text-align:left;overflow:hidden}
+.reel{position:relative;display:block;width:min(calc(900px*var(--s)),100%);aspect-ratio:16/9;background:#f4f4f4;border:1px solid var(--line);padding:0;color:inherit;cursor:pointer;font:inherit;text-align:left;overflow:hidden}
 .reel .thumb{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;pointer-events:none}
 .reel iframe{position:absolute;inset:0;display:block;width:100%;height:100%;border:0}
 .reel .tri{position:absolute;left:50%;top:50%;width:0;height:0;border-left:16px solid var(--ink);border-top:10px solid transparent;border-bottom:10px solid transparent;transform:translate(-35%,-50%);transition:transform .3s}
@@ -58,23 +58,6 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
 .film:hover .info,.film:focus-visible .info{opacity:1}
 .film .rt{white-space:nowrap}
 @media (hover:none){.film .info{opacity:1}}
-#cstage{z-index:2;pointer-events:none}
-.ftile{position:absolute;transition:transform .45s cubic-bezier(.2,.7,.2,1)}
-.ftile:hover,.ftile:focus-visible{transform:translateZ(calc(50px*var(--s))) scale(1.06)}
-.ftile .info{flex-direction:column;gap:2px;font-size:calc(9.5px*var(--s));padding:calc(18px*var(--s)) calc(8px*var(--s)) calc(6px*var(--s))}
-
-/* cinematography: desktop stage with floating films around a centered reel */
-.cine.stage{display:block;overflow:hidden;padding:0}
-.cine.stage.on{display:block}
-.cine.stage .reel{position:absolute;aspect-ratio:auto}
-.cine.stage .films,.cine.stage .grid{display:contents}
-.cine.stage .films>span{display:none}
-.cine.stage .film{position:absolute;animation:none}
-.cine.stage .film:hover{z-index:3}
-.cine.stage .socials{position:absolute;left:calc(28px*var(--s));bottom:calc(22px*var(--s))}
-@keyframes wig{0%,100%{transform:translate(0,0) rotate(0deg)}35%{transform:translate(1.5px,-2.5px) rotate(.35deg)}70%{transform:translate(-1.5px,1.5px) rotate(-.3deg)}}
-.cine:not(.stage) .film{animation:wig 5s ease-in-out var(--d,0s) infinite}
-@media (prefers-reduced-motion:reduce){.cine .film{animation:none!important}}
 
 /* about */
 .about.on{display:flex}
@@ -115,17 +98,17 @@ nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
     </div></div>
   </section>
 
-  <section class="page" id="cinematography" aria-label="Cinematography">
-    <div id="cstage"></div>
+  <section class="page cine" id="cinematography" aria-label="Cinematography">
     <button class="reel" id="reelLink" type="button" aria-label="Play the reel">
       <img class="thumb" src="https://img.youtube.com/vi/bMZotERnYkQ/hqdefault.jpg" alt="" aria-hidden="true">
       <span class="tri" aria-hidden="true"></span><span class="lab">reel</span>
     </button>
-    <div class="dock"><div class="socials">
+    <div class="films"><span>all films</span><div class="grid" id="films"></div></div>
+    <div class="socials">
       <a href="https://www.instagram.com/jespcr.png/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r=".7" fill="currentColor"/></svg></a>
       <a href="https://www.youtube.com/@jespyfilms/" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="4"/><path d="M10 9.2v5.6l4.8-2.8z"/></svg></a>
       <a href="https://letterboxd.com/jesparagus/" target="_blank" rel="noopener" aria-label="Letterboxd"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="3.7"/><circle cx="12" cy="12" r="3.7"/><circle cx="18" cy="12" r="3.7"/></svg></a>
-    </div></div>
+    </div>
   </section>
 
   <section class="page about" id="about" aria-label="About">
@@ -226,46 +209,16 @@ function openLb(i){last=document.activeElement;show(i);lb.classList.add("open");
 lb.querySelector(".x").onclick=closeLb;lb.querySelector(".p").onclick=function(){show(cur-1)};lb.querySelector(".n").onclick=function(){show(cur+1)};lb.addEventListener("click",function(e){if(e.target===lb)closeLb()});addEventListener("keydown",function(e){if(!lb.classList.contains("open"))return;if(e.key==="Escape")closeLb();if(e.key==="ArrowLeft")show(cur-1);if(e.key==="ArrowRight")show(cur+1)});
 try{
 function fmt(sec){sec=Math.round(sec);var h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),r=sec%60,p=function(n){return ("0"+n).slice(-2)};return h?h+":"+p(m)+":"+p(r):m+":"+p(r)}
-var cstage=document.getElementById("cstage"),cslots=[],cPage=document.getElementById("cinematography");
-/* where each film floats (fraction of the screen width, height): around the reel, never over it */
-var DSL=[[.10,.30],[.90,.26],[.09,.64],[.91,.62],[.50,.90],[.27,.90],[.73,.90],[.12,.47],[.88,.45]];
-var MSL=[[.28,.22],[.72,.17],[.28,.76],[.72,.83],[.50,.92]];
-FILMS.forEach(function(f,i){
-  var s=document.createElement("div");s.className="slot";s.style.pointerEvents="auto";
-  var a=document.createElement("a");a.className="film ftile";a.href="https://youtu.be/"+f.id;a.target="_blank";a.rel="noopener";
+var filmsEl=document.getElementById("films");
+FILMS.forEach(function(f){
+  var a=document.createElement("a");a.className="film";a.href="https://youtu.be/"+f.id;a.target="_blank";a.rel="noopener";
   a.setAttribute("aria-label",(f.title||"Film")+" - watch on YouTube");
   var im=document.createElement("img");im.src="https://img.youtube.com/vi/"+f.id+"/hqdefault.jpg";im.alt="";im.loading="lazy";
   var info=document.createElement("span");info.className="info";
   var ti=document.createElement("span");ti.textContent=f.title||"";
   var rt=document.createElement("span");rt.className="rt";rt.textContent=f.runtime||"";
-  info.appendChild(ti);info.appendChild(rt);a.appendChild(im);a.appendChild(info);s.appendChild(a);cstage.appendChild(s);
-  (f.rts=f.rts||[]).push(rt);
-  cslots.push({s:s,b:a,i:i});
+  info.appendChild(ti);info.appendChild(rt);a.appendChild(im);a.appendChild(info);filmsEl.appendChild(a);f.rt=rt;
 });
-function clayout(){
-  var vw=innerWidth,vh=innerHeight,m=vw<720,sl=m?MSL:DSL,W=(m?.40:.17)*vw,h=W*9/16;
-  cslots.forEach(function(o,i){
-    var p=sl[i];o.on=!!p;o.s.style.display=p?"block":"none";if(!p)return;
-    o.ry=(.5-p[0])*(m?20:36);o.rx=(p[1]-.5)*(m?10:30);
-    o.s.style.left=p[0]*vw+"px";o.s.style.top=p[1]*vh+"px";
-    o.b.style.cssText="width:"+W+"px;height:"+h+"px;left:"+(-W/2)+"px;top:"+(-h/2)+"px";
-  });
-}
-clayout();addEventListener("resize",clayout);
-function cframe(now){
-  var t=(now-t0)/1000;
-  if(cPage.classList.contains("on")){
-    var a=reduce?0:1,rp=a&&!reelLink.querySelector("iframe");
-    reelLink.style.transform="translate(-50%,-50%) translateY("+(rp?Math.sin(t*.7+3.1)*7*S:0).toFixed(2)+"px) rotate("+(rp?Math.sin(t*.45+1.2)*.35:0).toFixed(3)+"deg)";
-    cslots.forEach(function(o){
-      if(!o.on)return;
-      var dy=Math.sin(t*.7+o.i*1.9)*9*S*a,dx=Math.sin(t*.5+o.i*2.3)*5*S*a,rz=Math.sin(t*.6+o.i*1.3)*.9*a,z=((o.i*37)%5-2)*16*S;
-      o.s.style.transform="translate3d("+dx.toFixed(2)+"px,"+dy.toFixed(2)+"px,"+z+"px) rotateY("+o.ry+"deg) rotateX("+o.rx+"deg) rotateZ("+rz.toFixed(3)+"deg)";
-    });
-  }
-  requestAnimationFrame(cframe);
-}
-requestAnimationFrame(cframe);
 function loadRuntimes(){
   var need=FILMS.filter(function(f){return !f.runtime});if(!need.length)return;
   function go(){
@@ -275,7 +228,7 @@ function loadRuntimes(){
       var el=document.createElement("div");host.appendChild(el);
       new YT.Player(el,{width:"1",height:"1",videoId:f.id,playerVars:{controls:0,playsinline:1},events:{onReady:function(e){
         var n=0,iv=setInterval(function(){var d=e.target.getDuration();n++;
-          if(d>0){clearInterval(iv);(f.rts||[]).forEach(function(r){r.textContent=fmt(d)});e.target.destroy()}
+          if(d>0){clearInterval(iv);f.rt.textContent=fmt(d);e.target.destroy()}
           else if(n>25){clearInterval(iv);e.target.destroy()}},400)}}});
     });
   }
@@ -283,43 +236,6 @@ function loadRuntimes(){
   else{window.onYouTubeIframeAPIReady=go;var sc=document.createElement("script");sc.src="https://www.youtube.com/iframe_api";document.head.appendChild(sc)}
 }
 loadRuntimes();
-}catch(err){}
-try{
-var cineEl=document.getElementById("cinematography"),reelEl=document.getElementById("reelLink"),headerEl=document.querySelector("header");
-var filmEls=[].map.call(document.querySelectorAll("#films .film"),function(a,i){return{a:a,i:i,depth:[.6,1,.8,.5,.9][i%5],d:(-i*1.3).toFixed(1)+"s"}});
-var cineGeo={tw:0,A:0};
-var layoutCine=function(){
-  var vw=innerWidth,vh=innerHeight,desk=vw>=900&&vh>=460;
-  cineEl.classList.toggle("stage",desk);
-  if(!desk){reelEl.style.cssText="";filmEls.forEach(function(o){o.a.style.cssText="--d:"+o.d});return}
-  var T=headerEl.offsetHeight+Math.round(vh*.02),B=Math.max(64,Math.round(vh*.1)),M=Math.max(20,vw*.02),H=vh-T-B,cx=vw/2,cy=T+H/2;
-  var A=vw*.016,g=A+30,rw=Math.min(vw*.40,H*.72*16/9),rh=rw*9/16;
-  var avail=vw/2-rw/2-g-M-A,tw=Math.max(100,Math.min(vw*.15,avail/1.18)),th=tw*9/16,xo=tw*.18;
-  var vstep=Math.max(0,Math.min(H/2-th/2-A,rh*.7));
-  reelEl.style.cssText="left:"+(cx-rw/2)+"px;top:"+(cy-rh/2)+"px;width:"+rw+"px;height:"+rh+"px";
-  var lx=cx-rw/2-g-tw,rx0=cx+rw/2+g;
-  /* newest film first: left column gets 0,2,4 and right column gets 1,3 */
-  var spots=[[lx-xo,cy-vstep],[rx0+xo*.8,cy-vstep*.62],[lx,cy],[rx0,cy+vstep*.62],[lx-xo*.9,cy+vstep]];
-  filmEls.forEach(function(o,k){
-    var p=spots[k%5];
-    o.a.style.cssText="--d:"+o.d+";left:"+p[0]+"px;top:"+(p[1]-th/2)+"px;width:"+tw+"px";
-  });
-};
-var cmx=0,cmy=0;
-var cineFrame=function(now){
-  if(cineEl.classList.contains("on")&&cineEl.classList.contains("stage")){
-    var A=innerWidth*.016,t=now/1000;
-    var tx=reduce?0:(active?(mx-.5)*2:0),ty=reduce?0:(active?(my-.5)*2:0);
-    cmx+=(tx-cmx)*.06;cmy+=(ty-cmy)*.06;
-    filmEls.forEach(function(o){
-      var dx=cmx*A*o.depth+(reduce?0:Math.sin(t*.6+o.i*1.7)*6),dy=cmy*A*o.depth+(reduce?0:Math.cos(t*.5+o.i*2.1)*6);
-      o.a.style.transform="translate("+dx.toFixed(1)+"px,"+dy.toFixed(1)+"px)";
-    });
-  }
-  requestAnimationFrame(cineFrame);
-};
-filmEls.forEach(function(o){o.a.style.setProperty("--d",o.d)});
-layoutCine();addEventListener("resize",layoutCine);requestAnimationFrame(cineFrame);
 }catch(err){}
 route();
 </script>
